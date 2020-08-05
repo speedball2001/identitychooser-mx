@@ -5,12 +5,15 @@ class IcButton {
   constructor(buttonId) {
     this.buttonId = buttonId;
     this.popupId = buttonId + "Popup";
+
+    this.identities = [];
+    this.isAttached = false;
   }
 
   attachToWindow(window) {
-    this.window = window;
+    console.log("IcButton#attachToWindow - start");
 
-    console.log("IcButton#attachToWindow");
+    this.window = window;
     this.domButton = window.document.getElementById(this.buttonId);
     console.log(this.domButton);
 
@@ -35,32 +38,55 @@ class IcButton {
       }
 
       this.identityPopup.addEventListener("popupshowing",
-                                          this.onPopupShowing,
+                                          () => this.onPopupShowing(),
                                           false);
+
+      this.isAttached = true;
     }
+
+    console.log("IcButton#attachToWindow - stop");
   }
 
   addIdentity(identity) {
     console.log("IcButton#addIdentity");
 
-    var identityMenuItem = this.window.document.createXULElement("menuitem");
-    identityMenuItem.setAttribute(
-      "label",
-      identity);
-    identityMenuItem.setAttribute("value",
-                                  "identitychooser-1" /* + identity.key */);
-    /*identityMenuItem.addEventListener("command",
-                                      itemCommand,
-                                      false);*/
-
-    console.log(identityMenuItem);
-    this.identityPopup.appendChild(identityMenuItem);
-
-    console.log
+    this.identities.push(identity);
   }
 
   onPopupShowing() {
-    console.log("XXXXXX");
+    console.log("IcButton#onPopupShowing");
+    console.log(this.isAttached);
+
+    if(this.isAttached) {
+      this.clearIdentityPopup();
+
+      for (let identity of this.identities) {
+        var identityMenuItem = this.window.document.createXULElement("menuitem");
+        identityMenuItem.setAttribute("label",
+                                      identity);
+        identityMenuItem.setAttribute("value",
+                                      "identitychooser-1" /* + identity.key */);
+        /*identityMenuItem.addEventListener("command",
+          itemCommand,
+          false);*/
+
+        console.log(identityMenuItem);
+        this.identityPopup.appendChild(identityMenuItem);
+      }
+    }
+  }
+
+  clearIdentityPopup() {
+    for(let i = this.identityPopup.childNodes.length - 1; i >= 0; i--) {
+      let child = this.identityPopup.childNodes.item(i)
+
+      // Remove menuitems created by identitychooser (child.value
+      //   starts with "identitychooser-" or
+      if((child.hasAttribute("value") &&
+          child.getAttribute("value").indexOf("identitychooser-") > -1)) {
+        this.identityPopup.removeChild(child);
+      }
+    }
   }
 }
 
