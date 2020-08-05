@@ -1,0 +1,64 @@
+[
+  {
+    "namespace": "icApi",
+    "types": [
+      {
+        "id": "type1",
+        "type": "object",
+        "properties": {}
+      }
+    ],
+    "functions": [
+      {
+        "name": "initComposeMessageAction",
+        "description": "Intializes Compose Message",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "windowId",
+            "description": "window to be manipulated",
+            "type": "integer"
+          }
+        ]
+      },
+      {
+        "name": "addIdentity",
+        "description": "adds an identity to a button or menu",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "identity",
+            "description": "identity to be added",
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "description": "name of the action (compose, reply, replyAll, forward)",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "name": "onIdentityChosen",
+        "description": "fires when the user chose an identity",
+        "type": "function",
+        "parameters": [
+          {
+            "name": "identity",
+            "description": "identity that was chosen",
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "description": "action to be executed (compose, reply, replyAll, forward)",
+            "type": "string"
+          }
+        ]
+      }
+    ]
+  }
+]
