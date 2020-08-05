@@ -3,9 +3,18 @@
     "namespace": "icApi",
     "types": [
       {
-        "id": "type1",
+        "id": "IcIdentity",
         "type": "object",
-        "properties": {}
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the identity."
+          },
+          "label": {
+            "type": "string",
+            "description": "Label of the identity to be displayed in action labels."
+          }
+        }
       }
     ],
     "functions": [
@@ -31,7 +40,7 @@
           {
             "name": "identity",
             "description": "identity to be added",
-            "type": "string"
+            "$ref": "IcIdentity"
           },
           {
             "name": "action",
@@ -48,8 +57,8 @@
         "type": "function",
         "parameters": [
           {
-            "name": "identity",
-            "description": "identity that was chosen",
+            "name": "identityId",
+            "description": "id of the identity that was chosen",
             "type": "string"
           },
           {

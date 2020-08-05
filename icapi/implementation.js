@@ -54,7 +54,7 @@ class IcButton {
   }
 
   addIdentity(identity) {
-    console.log("IcButton#addIdentity");
+    console.log(`IcButton#addIdentity: ${identity.label}, ${identity.id}`);
 
     this.identities.push(identity);
   }
@@ -69,9 +69,9 @@ class IcButton {
       for (let identity of this.identities) {
         var identityMenuItem = this.window.document.createXULElement("menuitem");
         identityMenuItem.setAttribute("label",
-                                      identity);
+                                      identity.label);
         identityMenuItem.setAttribute("value",
-                                      "identitychooser-1" /* + identity.key */);
+                                      "identitychooser-" + identity.id);
         /*identityMenuItem.addEventListener("command",
           itemCommand,
           false);*/
@@ -111,7 +111,9 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
         async addIdentity(identity, action) {
           console.log(`icApi.addIdentiy: ${identity}, ${action}`);
 
-          composeButton.addIdentity(identity);
+          if(action == "compose") {
+            composeButton.addIdentity(identity);
+          }
         },
         onIdentityChosen: new ExtensionCommon.EventManager({
           context,
