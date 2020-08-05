@@ -15,20 +15,26 @@ class IcButton {
 
     this.window = window;
     this.domButton = window.document.getElementById(this.buttonId);
-    console.log(this.domButton);
 
     if(this.domButton) {
-      // Remove default command handler
-      this.orgCommand = this.domButton.getAttribute("oncommand");
-      this.domButton.removeAttribute("oncommand");
+      //
+      // Check if Button has already been converted into menu
+      if(this.domButton.hasAttribute("type") &&
+         this.domButton.getAttribute("type") == "menu") {
+        this.identityPopup = window.document.getElementById(this.popupId);
+      } else {
+        //
+        // Remove default command handler
+        this.orgCommand = this.domButton.getAttribute("oncommand");
+        this.domButton.removeAttribute("oncommand");
 
-      // Turn the button into a menu and add the popup menu.
-      this.domButton.setAttribute("type", "menu");
-      this.domButton.setAttribute("wantdropmarker", "true");
-      this.domButton.appendChild(window.MozXULElement.parseXULToFragment(
-        `<dropmarker type="menu" class="toolbarbutton-menu-dropmarker"/>`));
+        //
+        // Turn the button into a menu and add the popup menu.
+        this.domButton.setAttribute("type", "menu");
+        this.domButton.setAttribute("wantdropmarker", "true");
+        this.domButton.appendChild(window.MozXULElement.parseXULToFragment(
+          `<dropmarker type="menu" class="toolbarbutton-menu-dropmarker"/>`));
 
-      if(!this.identityPopup) {
         this.identityPopup = this.window.document.createXULElement("menupopup");
         console.log(this.identityPopup);
         this.identityPopup.setAttribute("id", this.popupId);
