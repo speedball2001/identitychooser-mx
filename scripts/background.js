@@ -5,6 +5,8 @@ class IdentityChooser {
 
   run() {
 
+    browser.icApi.onIdentityChosen.addListener((identityId, action) => this.identityChosen(identityId, action));
+
     browser.accounts.list().then((accounts) => {
       for (const account of accounts) {
         for (const identity of account.identities) {
@@ -45,6 +47,16 @@ class IdentityChooser {
     return {
       "label": label,
       id: mailIdentity.id
+    }
+  }
+
+  identityChosen(identityId, action) {
+    console.log(`IdentityChooser#background#identityChosen ${identityId}, ${action}`)
+
+    if(action == "compose") {
+      browser.compose.beginNew({
+        "identityId": identityId
+      });
     }
   }
 }

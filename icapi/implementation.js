@@ -1,8 +1,11 @@
 var { ExtensionCommon } = ChromeUtils.import("resource://gre/modules/ExtensionCommon.jsm");
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var { EventEmitter } = ChromeUtils.import("resource://gre/modules/EventEmitter.jsm");
+
 
 class IcButton {
-  constructor(buttonId) {
+  constructor(action, buttonId) {
+    this.action = action;
     this.buttonId = buttonId;
     this.popupId = buttonId + "Popup";
 
@@ -72,9 +75,9 @@ class IcButton {
                                       identity.label);
         identityMenuItem.setAttribute("value",
                                       "identitychooser-" + identity.id);
-        /*identityMenuItem.addEventListener("command",
-          itemCommand,
-          false);*/
+        identityMenuItem.addEventListener("command",
+                                          (event) => this.identityClicked(event),
+                                          false);
 
         console.log(identityMenuItem);
         this.identityPopup.appendChild(identityMenuItem);
@@ -94,9 +97,27 @@ class IcButton {
       }
     }
   }
+
+  identityClicked(event) {
+    console.log("IcButton#identityClicked - start");
+
+    console.log(event);
+    console.log(event.currentTarget);
+
+    let src = event.currentTarget;
+
+    // value="identitychooser-id1"
+    var identityId = src.value.split("-")[1];
+    icEventEmitter.emit("identity-action-event",
+                        identityId,
+                        this.action);
+
+    console.log("IcButton#identityClicked - stop");
+  }
 }
 
-var composeButton = new IcButton("button-newmsg");
+var icEventEmitter = new EventEmitter();
+var composeButton = new IcButton("compose", "button-newmsg");
 
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
@@ -119,13 +140,13 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           context,
           name: "icApi.onIdentityChosen",
           register(fire) {
-            function callback(event) {
-              return fire.async(identity, action);
+            function callback(event, identityId, action) {
+              return fire.async(identityId, action);
             }
 
-            listener.add(callback);
+            icEventEmitter.on("identity-action-event", callback);
             return function() {
-              listener.remove(callback);
+              icEventEmitter.off("identity-action-event", callback);
             };
           },
         }).api()
