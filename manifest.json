@@ -34,6 +34,14 @@
         "paths": [[ "icApi" ]],
         "script": "icapi/implementation.js"
       }
+    },
+    "composePrefsApi": {
+      "schema": "composeprefsapi/schema.json",
+      "parent": {
+        "scopes": [ "addon_parent" ],
+        "paths": [[ "composePrefsApi" ]],
+        "script": "composeprefsapi/implementation.js"
+      }
     }
   }
 }
