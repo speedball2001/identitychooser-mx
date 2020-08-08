@@ -1,0 +1,39 @@
+{
+  "manifest_version": 2,
+  "name": "Identity Chooser",
+  "description": "Identity Chooser helps you to choose the correct identity when composing a new email.",
+  "version": "2.0",
+  "author": "Janek Schwarz",
+  "applications": {
+    "gecko": {
+      "id": "identitychooser@janek.org",
+      "strict_min_version": "78.0"
+    }
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "Identity Chooser",
+    "default_icon": "images/internet-32px.png"
+  },
+  "permissions": [
+    "accountsRead", "compose"
+  ],
+  "background": {
+    "scripts": ["scripts/background.js"]
+  },
+  "icons": {
+    "64": "images/internet.png",
+    "32": "images/internet-32px.png",
+    "16": "images/internet-16px.png"
+  },
+ "experiment_apis": {
+    "icApi": {
+      "schema": "icapi/schema.json",
+      "parent": {
+        "scopes": [ "addon_parent" ],
+        "paths": [[ "icApi" ]],
+        "script": "icapi/implementation.js"
+      }
+    }
+  }
+}

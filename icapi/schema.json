@@ -1,0 +1,93 @@
+[
+  {
+    "namespace": "icApi",
+    "types": [
+      {
+        "id": "IcIdentity",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the identity."
+          },
+          "label": {
+            "type": "string",
+            "description": "Label of the identity to be displayed in action labels."
+          }
+        }
+      },
+      {
+        "id": "IcOnClickData",
+        "type": "object",
+        "properties": {
+          "modifiers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Shift", "Alt", "Command", "Ctrl", "MacCtrl"]
+            },
+            "description": "An array of keyboard modifiers that were held while the menu item was clicked."
+          }
+        }
+      }
+    ],
+    "functions": [
+      {
+        "name": "initComposeMessageAction",
+        "description": "Intializes Compose Message",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "windowId",
+            "description": "window to be manipulated",
+            "type": "integer"
+          }
+        ]
+      },
+      {
+        "name": "addIdentity",
+        "description": "adds an identity to a button or menu",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "identity",
+            "description": "identity to be added",
+            "$ref": "IcIdentity"
+          },
+          {
+            "name": "action",
+            "description": "name of the action (compose, reply, replyAll, forward)",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "name": "onIdentityChosen",
+        "description": "fires when the user chose an identity",
+        "type": "function",
+        "parameters": [
+          {
+            "name": "identityId",
+            "description": "id of the identity that was chosen",
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "description": "action to be executed (compose, reply, replyAll, forward)",
+            "type": "string"
+          },
+          {
+            "name": "info",
+            "optional": true,
+            "description": "Information sent when a identity chooser action is clicked.",
+            "$ref": "IcOnClickData"
+          }
+        ]
+      }
+    ]
+  }
+]
