@@ -15,6 +15,20 @@
             "description": "Label of the identity to be displayed in action labels."
           }
         }
+      },
+      {
+        "id": "IcOnClickData",
+        "type": "object",
+        "properties": {
+          "modifiers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Shift", "Alt", "Command", "Ctrl", "MacCtrl"]
+            },
+            "description": "An array of keyboard modifiers that were held while the menu item was clicked."
+          }
+        }
       }
     ],
     "functions": [
@@ -65,6 +79,12 @@
             "name": "action",
             "description": "action to be executed (compose, reply, replyAll, forward)",
             "type": "string"
+          },
+          {
+            "name": "info",
+            "optional": true,
+            "description": "Information sent when a identity chooser action is clicked.",
+            "$ref": "IcOnClickData"
           }
         ]
       }

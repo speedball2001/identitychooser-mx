@@ -5,7 +5,7 @@ class IdentityChooser {
 
   run() {
 
-    browser.icApi.onIdentityChosen.addListener((identityId, action) => this.identityChosen(identityId, action));
+    browser.icApi.onIdentityChosen.addListener((identityId, action, info) => this.identityChosen(identityId, action, info));
 
     browser.accounts.list().then((accounts) => {
       for (const account of accounts) {
@@ -50,8 +50,8 @@ class IdentityChooser {
     }
   }
 
-  identityChosen(identityId, action) {
-    console.log(`IdentityChooser#background#identityChosen ${identityId}, ${action}`)
+  identityChosen(identityId, action, info) {
+    console.log(`IdentityChooser#background#identityChosen ${identityId}, ${action}, ${info}`)
 
     if(action == "compose") {
       browser.compose.beginNew({

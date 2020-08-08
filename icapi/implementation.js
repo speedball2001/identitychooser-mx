@@ -38,8 +38,7 @@ class IcButton {
         this.domButton.appendChild(window.MozXULElement.parseXULToFragment(
           `<dropmarker type="menu" class="toolbarbutton-menu-dropmarker"/>`));
 
-        this.identityPopup = this.window.document.createXULElement("menupopup");
-        console.log(this.identityPopup);
+        this.identityPopup = this.window.document.createXULElement("menupopup");        console.log(this.identityPopup);
         this.identityPopup.setAttribute("id", this.popupId);
         console.log(this.identityPopup);
 
@@ -105,12 +104,30 @@ class IcButton {
     console.log(event.currentTarget);
 
     let src = event.currentTarget;
+    let info = [];
+
+    if(event.shiftKey) {
+      info.push("Shift");
+    }
+
+    if(event.ctrlKey) {
+      info.push("Ctrl");
+    }
+
+    if(event.altKey) {
+      info.push("Alt");
+    }
+
+    if(event.metaKey) {
+      info.push("Command");
+    }
 
     // value="identitychooser-id1"
     var identityId = src.value.split("-")[1];
     icEventEmitter.emit("identity-action-event",
                         identityId,
-                        this.action);
+                        this.action,
+                       info);
 
     console.log("IcButton#identityClicked - stop");
   }
@@ -129,7 +146,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
 
           composeButton.attachToWindow(window);
         },
-        async addIdentity(identity, action) {
+        async addIdentity(identity, action, info) {
           console.log(`icApi.addIdentiy: ${identity}, ${action}`);
 
           if(action == "compose") {
@@ -140,8 +157,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           context,
           name: "icApi.onIdentityChosen",
           register(fire) {
-            function callback(event, identityId, action) {
-              return fire.async(identityId, action);
+            function callback(event, identityId, action, info) {
+              return fire.async(identityId, action, info);
             }
 
             icEventEmitter.on("identity-action-event", callback);
