@@ -50,13 +50,36 @@ class IdentityChooser {
     }
   }
 
-  identityChosen(identityId, action, info) {
+  async identityChosen(identityId, action, info) {
     console.log(`IdentityChooser#background#identityChosen ${identityId}, ${action}, ${info}`)
 
+    var messageFormat = await browser.composePrefsApi.getMessageFormat(identityId);
+
+    console.log(messageFormat);
+    console.log(info.includes("Shift"));
+
+    if(info.includes("Shift")) {
+      if(messageFormat == "text/plain") {
+        messageFormat = "text/html";
+      } else {
+        messageFormat = "text/plain";
+        }
+    }
+
     if(action == "compose") {
-      browser.compose.beginNew({
-        "identityId": identityId
-      });
+      if(messageFormat == "text/plain") {
+        browser.compose.beginNew({
+          "identityId": identityId,
+          "isPlainText" : true,
+          "plainTextBody": ""
+        });
+      } else {
+        browser.compose.beginNew({
+          "identityId": identityId,
+          "isPlainText" : false,
+          "body": ""
+        });
+      }
     }
   }
 }

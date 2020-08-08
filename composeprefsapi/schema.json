@@ -1,18 +1,20 @@
 [
-  "namespace": "composePrefsApi",
-  "functions": [
-    {
-      "name": "get",
-      "description": "get compose prefs for an identity",
-      "type": "function",
-      "async": true,
-      "parameters": [
-        {
-          "name": "identityId",
-          "description": "identity id",
-          "type": "string"
-        }
-      ]
-    },
-  ]
+  {
+    "namespace": "composePrefsApi",
+    "functions": [
+      {
+        "name": "getMessageFormat",
+        "description": "get compose prefs for an identity",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "identityId",
+            "description": "identity id",
+            "type": "string"
+          }
+        ]
+      }
+    ]
+  }
 ]
