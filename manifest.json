@@ -16,7 +16,7 @@
     "default_icon": "images/internet-32px.png"
   },
   "permissions": [
-    "accountsRead", "compose"
+    "accountsRead", "compose", "activeTab", "tabs", "messagesRead"
   ],
   "background": {
     "scripts": ["scripts/background.js"]

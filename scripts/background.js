@@ -14,6 +14,7 @@ class IdentityChooser {
           var icIdentity = this.toIcIdentity(identity);
 
           browser.icApi.addIdentity(icIdentity, "compose");
+          browser.icApi.addIdentity(icIdentity, "reply");
         }
       }
     });
@@ -31,6 +32,7 @@ class IdentityChooser {
   initUI(window) {
     if(window.type == "normal") {
       browser.icApi.initComposeMessageAction(window.id);
+      browser.icApi.initReplyMessageAction(window.id);
     }
   }
 
@@ -55,9 +57,6 @@ class IdentityChooser {
 
     var messageFormat = await browser.composePrefsApi.getMessageFormat(identityId);
 
-    console.log(messageFormat);
-    console.log(info.includes("Shift"));
-
     if(info.includes("Shift")) {
       if(messageFormat == "text/plain") {
         messageFormat = "text/html";
@@ -79,6 +78,27 @@ class IdentityChooser {
           "isPlainText" : false,
           "body": ""
         });
+      }
+    } else if(action == "reply") {
+      var tabs = await browser.tabs.query({ active: true, currentWindow: true });
+      for (let tab of tabs) {
+        var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
+
+        if(messageFormat == "text/plain") {
+          browser.compose.beginReply(msg.id,
+                                     "replyToSender",
+                                     { "identityId": identityId,
+                                       "isPlainText" : true,
+                                       "plainTextBody": ""
+                                     });
+        } else {
+          browser.compose.beginReply(msg.id,
+                                     "replyToSender",
+                                     { "identityId": identityId,
+                                       "isPlainText" : false,
+                                       "body": ""
+                                     });
+        }
       }
     }
   }
