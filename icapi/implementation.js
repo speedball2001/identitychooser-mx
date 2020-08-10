@@ -135,6 +135,7 @@ class IcButton {
 
 var icEventEmitter = new EventEmitter();
 var composeButton = new IcButton("compose", "button-newmsg");
+var replyButton = new IcButton("reply", "hdrReplyButton");
 
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
@@ -146,11 +147,19 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
 
           composeButton.attachToWindow(window);
         },
-        async addIdentity(identity, action, info) {
+        async initReplyMessageAction(windowId) {
+          console.log(`icApi.initReplayMessageAction: ${windowId}`);
+          let window = context.extension.windowManager.get(windowId, context).window;
+
+          replyButton.attachToWindow(window);
+        },
+        async addIdentity(identity, action) {
           console.log(`icApi.addIdentiy: ${identity}, ${action}`);
 
           if(action == "compose") {
             composeButton.addIdentity(identity);
+          } else if(action == "reply") {
+            replyButton.addIdentity(identity);
           }
         },
         onIdentityChosen: new ExtensionCommon.EventManager({
