@@ -181,7 +181,7 @@ class SmartReplyButton extends IcButton {
     var newReplyBtn = window.MozXULElement.parseXULToFragment(
       `<toolbarbutton id="${buttonId}"
                       wantdropmarker="true"
-                      label="${label} XXX"
+                      label="${label}"
                       tooltiptext="${tooltipText}"
                       class="toolbarbutton-1 msgHeaderView-button hdrReplyButton hdrReplyAllButton"/>`);
 
@@ -216,6 +216,7 @@ class SmartReplyButton extends IcButton {
 var icEventEmitter = new EventEmitter();
 var composeButton = new IcButton("compose", "button-newmsg");
 var replyButton = new IcButton("reply", "hdrReplyButton");
+var replyToSenderButton = new IcButton("reply", "hdrReplyToSenderButton");
 var replyAllButton = new SmartReplyButton("replyAll",
                                           "hdrReplyAllButton",
                                           "hdrReplyAllDropdown");
@@ -235,6 +236,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           let window = context.extension.windowManager.get(windowId, context).window;
 
           replyButton.attachToWindow(window);
+          replyToSenderButton.attachToWindow(window);
           replyAllButton.attachToWindow(window);
         },
         async addIdentity(identity, action) {
@@ -244,6 +246,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
             composeButton.addIdentity(identity);
           } else if(action == "reply") {
             replyButton.addIdentity(identity);
+            replyToSenderButton.addIdentity(identity);
           } else if(action == "replyAll") {
             replyAllButton.addIdentity(identity);
           }
