@@ -24,7 +24,7 @@ class IcButton {
     console.log("IcButton#attachToWindow - start");
 
     this.window = window;
-    this.domButton = window.document.getElementById(this.buttonId);
+    this.domButton = this.findButton(this.window, this.buttonId);
 
     if(this.domButton) {
       //
@@ -34,8 +34,11 @@ class IcButton {
         this.identityPopup = window.document.getElementById(this.popupId);
       } else {
         this.setupButton(this.window, this.domButton);
+        console.log("after this.setupButton");
         this.identityPopup = this.createPopupMenu(this.window, this.popupId);
+        console.log("after this.createPopupMenu");
         this.domButton.appendChild(this.identityPopup);
+        console.log("after domButton.appendChild");
       }
 
       this.identityPopup.addEventListener("popupshowing",
@@ -46,6 +49,11 @@ class IcButton {
     }
 
     console.log("IcButton#attachToWindow - stop");
+  }
+
+  findButton(window, buttonId) {
+    console.log("IcButton#findButton");
+    return window.document.getElementById(buttonId);
   }
 
   setupButton(window, btn) {
@@ -64,6 +72,7 @@ class IcButton {
   }
 
   createPopupMenu(window, popupId) {
+    console.log(`IcButton#createPopupMenu: ${window}, ${popupId}`);
     var popup = window.document.createXULElement("menupopup");
     console.log(popup);
     popup.setAttribute("id", popupId);
@@ -155,41 +164,45 @@ class IcButton {
   }
 }
 
-class ReplyAllButton extends IcButton {
+class SmartReplyButton extends IcButton {
   constructor(action, buttonId, popupId) {
     super(action, buttonId, popupId);
   }
 
+  findButton(window, buttonId) {
+    console.log("SmartReplyButton#findButton");
+    var smartReplyBtn = window.document.getElementById("hdrSmartReplyButton");
+    var orgReplyBtn = window.document.getElementById(buttonId);
+    var label = orgReplyBtn.getAttribute("label");
+    var tooltipText = orgReplyBtn.getAttribute("tooltiptext");
+
+    console.log(`SmartReplyButton#findButton: ${label}, ${tooltipText}`);
+
+    var newReplyBtn = window.MozXULElement.parseXULToFragment(
+      `<toolbarbutton id="${buttonId}"
+                      wantdropmarker="true"
+                      label="${label} XXX"
+                      tooltiptext="${tooltipText}"
+                      class="toolbarbutton-1 msgHeaderView-button hdrReplyButton hdrReplyAllButton"/>`);
+
+    console.log(newReplyBtn);
+
+    smartReplyBtn.replaceChild(newReplyBtn, orgReplyBtn);
+
+    return window.document.getElementById(buttonId);
+  }
+
   setupButton(window, btn) {
     //
-    // Remove default command handler
-    btn.removeAttribute("oncommand");
-
-    //
     // Turn the button into a menu
-    btn.removeAttribute("is");
     btn.setAttribute("type", "menu");
-    btn.setAttribute("wantdropmarker", "true");
-
-    var dropMarkers =
-        btn.getElementsByClassName('toolbarbutton-menubutton-dropmarker');
-    while(dropMarkers.length > 0) {
-      dropMarkers[0].remove();
-    }
-
-    var toolbarbuttons =
-        btn.getElementsByClassName('toolbarbutton-menubutton-button');
-    while(toolbarbuttons.length > 0) {
-      toolbarbuttons[0].remove();
-    }
-
-    btn.appendChild(window.MozXULElement.parseXULToFragment(
-      `<dropmarker type="menu" class="toolbarbutton-menu-dropmarker"/>`));
 
     return btn;
   }
 
   createPopupMenu(window, popupId) {
+    console.log(`SmartReplyButton#createPopupMenu: ${window}, ${popupId}`);
+
     var popup = window.document.createXULElement("menupopup");
     console.log(popup);
     popup.setAttribute("id", popupId);
@@ -203,9 +216,9 @@ class ReplyAllButton extends IcButton {
 var icEventEmitter = new EventEmitter();
 var composeButton = new IcButton("compose", "button-newmsg");
 var replyButton = new IcButton("reply", "hdrReplyButton");
-var replyAllButton = new ReplyAllButton("replyAll",
-                                        "hdrReplyAllButton",
-                                        "hdrReplyAllDropdown");
+var replyAllButton = new SmartReplyButton("replyAll",
+                                          "hdrReplyAllButton",
+                                          "hdrReplyAllDropdown");
 
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
