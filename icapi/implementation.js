@@ -4,10 +4,17 @@ var { EventEmitter } = ChromeUtils.import("resource://gre/modules/EventEmitter.j
 
 
 class IcButton {
-  constructor(action, buttonId) {
+  constructor(action, buttonId, popupId) {
+    console.log(`IcButton#constructor: ${action}, ${buttonId}, ${popupId}`);
+
     this.action = action;
     this.buttonId = buttonId;
-    this.popupId = buttonId + "Popup";
+
+    if(popupId == null) {
+      this.popupId = buttonId + "Popup";
+    } else {
+      this.popupId = popupId;
+    }
 
     this.identities = [];
     this.isAttached = false;
@@ -26,22 +33,8 @@ class IcButton {
          this.domButton.getAttribute("type") == "menu") {
         this.identityPopup = window.document.getElementById(this.popupId);
       } else {
-        //
-        // Remove default command handler
-        this.orgCommand = this.domButton.getAttribute("oncommand");
-        this.domButton.removeAttribute("oncommand");
-
-        //
-        // Turn the button into a menu and add the popup menu.
-        this.domButton.setAttribute("type", "menu");
-        this.domButton.setAttribute("wantdropmarker", "true");
-        this.domButton.appendChild(window.MozXULElement.parseXULToFragment(
-          `<dropmarker type="menu" class="toolbarbutton-menu-dropmarker"/>`));
-
-        this.identityPopup = this.window.document.createXULElement("menupopup");        console.log(this.identityPopup);
-        this.identityPopup.setAttribute("id", this.popupId);
-        console.log(this.identityPopup);
-
+        this.setupButton(this.window, this.domButton);
+        this.identityPopup = this.createPopupMenu(this.window, this.popupId);
         this.domButton.appendChild(this.identityPopup);
       }
 
@@ -53,6 +46,30 @@ class IcButton {
     }
 
     console.log("IcButton#attachToWindow - stop");
+  }
+
+  setupButton(window, btn) {
+    //
+    // Remove default command handler
+    btn.removeAttribute("oncommand");
+
+    //
+    // Turn the button into a menu and add the popup menu.
+    btn.setAttribute("type", "menu");
+    btn.setAttribute("wantdropmarker", "true");
+    btn.appendChild(window.MozXULElement.parseXULToFragment(
+      `<dropmarker type="menu" class="toolbarbutton-menu-dropmarker"/>`));
+
+    return btn;
+  }
+
+  createPopupMenu(window, popupId) {
+    var popup = window.document.createXULElement("menupopup");
+    console.log(popup);
+    popup.setAttribute("id", popupId);
+    console.log(popup);
+
+    return popup;
   }
 
   addIdentity(identity) {
@@ -100,6 +117,9 @@ class IcButton {
   identityClicked(event) {
     console.log("IcButton#identityClicked - start");
 
+    event.stopPropagation();
+    event.preventDefault();
+
     console.log(event);
     console.log(event.currentTarget);
 
@@ -130,12 +150,62 @@ class IcButton {
                        info);
 
     console.log("IcButton#identityClicked - stop");
+
+    return false;
   }
+}
+
+class ReplyAllButton extends IcButton {
+  constructor(action, buttonId, popupId) {
+    super(action, buttonId, popupId);
+  }
+
+  setupButton(window, btn) {
+    //
+    // Remove default command handler
+    btn.removeAttribute("oncommand");
+
+    //
+    // Turn the button into a menu
+    btn.removeAttribute("is");
+    btn.setAttribute("type", "menu");
+    btn.setAttribute("wantdropmarker", "true");
+
+    var dropMarkers =
+        btn.getElementsByClassName('toolbarbutton-menubutton-dropmarker');
+    while(dropMarkers.length > 0) {
+      dropMarkers[0].remove();
+    }
+
+    var toolbarbuttons =
+        btn.getElementsByClassName('toolbarbutton-menubutton-button');
+    while(toolbarbuttons.length > 0) {
+      toolbarbuttons[0].remove();
+    }
+
+    btn.appendChild(window.MozXULElement.parseXULToFragment(
+      `<dropmarker type="menu" class="toolbarbutton-menu-dropmarker"/>`));
+
+    return btn;
+  }
+
+  createPopupMenu(window, popupId) {
+    var popup = window.document.createXULElement("menupopup");
+    console.log(popup);
+    popup.setAttribute("id", popupId);
+    console.log(popup);
+
+    return popup;
+  }
+
 }
 
 var icEventEmitter = new EventEmitter();
 var composeButton = new IcButton("compose", "button-newmsg");
 var replyButton = new IcButton("reply", "hdrReplyButton");
+var replyAllButton = new ReplyAllButton("replyAll",
+                                        "hdrReplyAllButton",
+                                        "hdrReplyAllDropdown");
 
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
@@ -152,6 +222,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           let window = context.extension.windowManager.get(windowId, context).window;
 
           replyButton.attachToWindow(window);
+          replyAllButton.attachToWindow(window);
         },
         async addIdentity(identity, action) {
           console.log(`icApi.addIdentiy: ${identity}, ${action}`);
@@ -160,6 +231,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
             composeButton.addIdentity(identity);
           } else if(action == "reply") {
             replyButton.addIdentity(identity);
+          } else if(action == "replyAll") {
+            replyAllButton.addIdentity(identity);
           }
         },
         onIdentityChosen: new ExtensionCommon.EventManager({

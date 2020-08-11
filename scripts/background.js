@@ -15,6 +15,7 @@ class IdentityChooser {
 
           browser.icApi.addIdentity(icIdentity, "compose");
           browser.icApi.addIdentity(icIdentity, "reply");
+          browser.icApi.addIdentity(icIdentity, "replyAll");
         }
       }
     });
@@ -94,6 +95,27 @@ class IdentityChooser {
         } else {
           browser.compose.beginReply(msg.id,
                                      "replyToSender",
+                                     { "identityId": identityId,
+                                       "isPlainText" : false,
+                                       "body": ""
+                                     });
+        }
+      }
+    } else if(action == "replyAll") {
+      var tabs = await browser.tabs.query({ active: true, currentWindow: true });
+      for (let tab of tabs) {
+        var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
+
+        if(messageFormat == "text/plain") {
+          browser.compose.beginReply(msg.id,
+                                     "replyToAll",
+                                     { "identityId": identityId,
+                                       "isPlainText" : true,
+                                       "plainTextBody": ""
+                                     });
+        } else {
+          browser.compose.beginReply(msg.id,
+                                     "replyToAll",
                                      { "identityId": identityId,
                                        "isPlainText" : false,
                                        "body": ""
