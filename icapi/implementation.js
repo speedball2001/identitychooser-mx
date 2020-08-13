@@ -220,7 +220,7 @@ var replyToSenderButton = new IcButton("reply", "hdrReplyToSenderButton");
 var replyAllButton = new SmartReplyButton("replyAll",
                                           "hdrReplyAllButton",
                                           "hdrReplyAllDropdown");
-
+var forwardButton = new IcButton("forward", "hdrForwardButton");
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
     return {
@@ -239,6 +239,13 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           replyToSenderButton.attachToWindow(window);
           replyAllButton.attachToWindow(window);
         },
+        async initForwardMessageAction(windowId) {
+          console.log(`icApi.initForwardMessageAction: ${windowId}`);
+          let window = context.extension.windowManager.get(windowId, context).window;
+
+          forwardButton.attachToWindow(window);
+        },
+
         async addIdentity(identity, action) {
           console.log(`icApi.addIdentiy: ${identity}, ${action}`);
 
@@ -249,6 +256,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
             replyToSenderButton.addIdentity(identity);
           } else if(action == "replyAll") {
             replyAllButton.addIdentity(identity);
+          } else if(action == "forward") {
+            forwardButton.addIdentity(identity);
           }
         },
         onIdentityChosen: new ExtensionCommon.EventManager({

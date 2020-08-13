@@ -4,7 +4,6 @@ class IdentityChooser {
   }
 
   run() {
-
     browser.icApi.onIdentityChosen.addListener((identityId, action, info) => this.identityChosen(identityId, action, info));
 
     browser.accounts.list().then((accounts) => {
@@ -16,6 +15,7 @@ class IdentityChooser {
           browser.icApi.addIdentity(icIdentity, "compose");
           browser.icApi.addIdentity(icIdentity, "reply");
           browser.icApi.addIdentity(icIdentity, "replyAll");
+          browser.icApi.addIdentity(icIdentity, "forward");
         }
       }
     });
@@ -34,6 +34,7 @@ class IdentityChooser {
     if(window.type == "normal") {
       browser.icApi.initComposeMessageAction(window.id);
       browser.icApi.initReplyMessageAction(window.id);
+      browser.icApi.initForwardMessageAction(window.id);
     }
   }
 
@@ -120,6 +121,29 @@ class IdentityChooser {
                                        "isPlainText" : false,
                                        "body": ""
                                      });
+        }
+      }
+    } else if(action == "forward") {
+      var forwardType = await browser.composePrefsApi.getForwardType();
+
+      var tabs = await browser.tabs.query({ active: true, currentWindow: true });
+      for (let tab of tabs) {
+        var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
+        var window = await browser.windows.getCurrent();
+
+        if(!info.includes("Shift")) {
+          browser.icForwardApi.beginForward(msg,
+                                            forwardType,
+                                            { "identityId": identityId,
+                                              "format" : "Default"
+                                            });
+        } else {
+          browser.icForwardApi.beginForward(msg,
+                                            forwardType,
+                                            { "identityId": identityId,
+                                              "format" : "OppositeOfDefault",
+                                              "body": ""
+                                            });
         }
       }
     }

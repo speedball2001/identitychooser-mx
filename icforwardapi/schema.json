@@ -1,0 +1,30 @@
+[
+  {
+    "namespace": "icForwardApi",
+    "functions": [
+      {
+        "name": "beginForward",
+        "description": "get compose prefs for an identity",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "messageId",
+            "description": "identity id",
+            "type": "any"
+          },
+          {
+            "name": "forwardType",
+            "description": "forward type",
+            "type": "string"
+          },
+          {
+            "name": "details",
+            "description": "",
+            "type": "any"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -59,6 +59,19 @@
         ]
       },
       {
+        "name": "initForwardMessageAction",
+        "description": "Intializes Forward Message",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "windowId",
+            "description": "window to be manipulated",
+            "type": "integer"
+          }
+        ]
+      },
+      {
         "name": "addIdentity",
         "description": "adds an identity to a button or menu",
         "type": "function",
