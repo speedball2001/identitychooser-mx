@@ -42,6 +42,14 @@
         "paths": [[ "composePrefsApi" ]],
         "script": "composeprefsapi/implementation.js"
       }
+    },
+    "icForwardApi": {
+      "schema": "icforwardapi/schema.json",
+      "parent": {
+        "scopes": [ "addon_parent" ],
+        "paths": [[ "icForwardApi" ]],
+        "script": "icforwardapi/implementation.js"
+      }
     }
   }
 }
