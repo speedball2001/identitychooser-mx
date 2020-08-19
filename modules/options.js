@@ -7,6 +7,29 @@ export class Options {
     await this.setupListeners();
   }
 
+  async isEnabledComposeMessage() {
+    return this.isEnabledOption("icEnableComposeMessage", true);
+  }
+
+  async isEnabledReplyMessage() {
+    return this.isEnabledOption("icEnableReplyMessage", true);
+  }
+
+  async isEnabledForwardMessage() {
+    return this.isEnabledOption("icEnableForwardMessage", true);
+  }
+
+  async isEnabledOption(option, defaultValue) {
+    var icOptions = await browser.storage.local.get();
+
+    var ret = defaultValue;
+    if(option in icOptions) {
+      ret = icOptions[option];
+    }
+
+    return ret;
+  }
+
   async localizePage() {
     console.log("Options#localizePage");
   }
