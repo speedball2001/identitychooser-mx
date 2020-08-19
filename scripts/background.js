@@ -3,8 +3,12 @@ class IdentityChooser {
 
   }
 
-  run() {
+  async run() {
     browser.icApi.onIdentityChosen.addListener((identityId, action, info) => this.identityChosen(identityId, action, info));
+
+    var icOptions = await browser.storage.local.get();
+
+    console.log(icOptions);
 
     browser.accounts.list().then((accounts) => {
       for (const account of accounts) {
@@ -12,10 +16,21 @@ class IdentityChooser {
           console.log(identity);
           var icIdentity = this.toIcIdentity(identity);
 
-          browser.icApi.addIdentity(icIdentity, "compose");
-          browser.icApi.addIdentity(icIdentity, "reply");
-          browser.icApi.addIdentity(icIdentity, "replyAll");
-          browser.icApi.addIdentity(icIdentity, "forward");
+          if("icEnableComposeMessage" in icOptions &&
+             icOptions.icEnableComposeMessage) {
+            browser.icApi.addIdentity(icIdentity, "compose");
+          }
+
+          if("icEnableReplyMessage" in icOptions &&
+             icOptions.icEnableReplyMessage) {
+            browser.icApi.addIdentity(icIdentity, "reply");
+            browser.icApi.addIdentity(icIdentity, "replyAll");
+          }
+
+          if("icEnableForwardMessage" in icOptions &&
+             icOptions.icEnableForwardMessage) {
+            browser.icApi.addIdentity(icIdentity, "forward");
+          }
         }
       }
     });
@@ -30,11 +45,24 @@ class IdentityChooser {
     browser.windows.onCreated.addListener(this.initUI);
   }
 
-  initUI(window) {
+  async initUI(window) {
     if(window.type == "normal") {
-      browser.icApi.initComposeMessageAction(window.id);
-      browser.icApi.initReplyMessageAction(window.id);
-      browser.icApi.initForwardMessageAction(window.id);
+
+      var icOptions = await browser.storage.local.get();
+      if("icEnableComposeMessage" in icOptions &&
+         icOptions.icEnableComposeMessage) {
+        browser.icApi.initComposeMessageAction(window.id);
+      }
+
+      if("icEnableReplyMessage" in icOptions &&
+         icOptions.icEnableReplyMessage) {
+        browser.icApi.initReplyMessageAction(window.id);
+      }
+
+      if("icEnableForwardMessage" in icOptions &&
+         icOptions.icEnableForwardMessage) {
+        browser.icApi.initForwardMessageAction(window.id);
+      }
     }
   }
 
