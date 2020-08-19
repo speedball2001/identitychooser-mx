@@ -10,21 +10,11 @@
       "strict_min_version": "78.0"
     }
   },
-  "browser_action": {
-    "default_popup": "popup.html",
-    "default_title": "Identity Chooser",
-    "default_icon": "images/internet-32px.png"
-  },
   "permissions": [
     "accountsRead", "compose", "activeTab", "tabs", "messagesRead"
   ],
   "background": {
     "scripts": ["scripts/background.js"]
-  },
-  "icons": {
-    "64": "images/internet.png",
-    "32": "images/internet-32px.png",
-    "16": "images/internet-16px.png"
   },
  "experiment_apis": {
     "icApi": {
