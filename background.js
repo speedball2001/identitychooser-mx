@@ -6,6 +6,8 @@ class IdentityChooser {
   }
 
   async run() {
+    await this.icOptions.setupDefaultOptions();
+
     browser.icApi.onIdentityChosen.addListener((identityId, action, info) => this.identityChosen(identityId, action, info));
 
     var accounts = await browser.accounts.list();

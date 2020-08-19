@@ -1,10 +1,28 @@
 export class Options {
+  constructor() {
+    this.defaultOptions = {
+      icEnableComposeMessage: true,
+      icEnableReplyMessage: true,
+      icEnableForwardMessage: true
+    };
+  }
+
   async run() {
     console.log("Options#run");
 
     await this.localizePage();
     await this.updateUI();
     await this.setupListeners();
+  }
+
+  async setupDefaultOptions() {
+    var icOptions = await browser.storage.local.get();
+
+    for(const [optionName, defaultValue] of Object.entries(this.defaultOptions)) {
+      if(!(optionName in icOptions)) {
+        browser.storage.local.set({ [optionName] : defaultValue});
+      }
+    }
   }
 
   async isEnabledComposeMessage() {
