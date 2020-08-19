@@ -1,3 +1,5 @@
+import { Options } from './modules/options.js';
+
 class IdentityChooser {
   constructor() {
 

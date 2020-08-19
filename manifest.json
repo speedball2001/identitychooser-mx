@@ -14,7 +14,7 @@
     "accountsRead", "compose", "activeTab", "tabs", "messagesRead", "storage"
   ],
   "background": {
-    "scripts": ["scripts/background.js"]
+    "page": "background.html"
   },
   "options_ui": {
     "page": "options/options.html",
