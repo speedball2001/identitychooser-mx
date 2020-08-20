@@ -45,6 +45,14 @@
         "paths": [[ "icForwardApi" ]],
         "script": "icforwardapi/implementation.js"
       }
+    },
+    "legacyPrefsApi": {
+      "schema": "legacyprefsapi/schema.json",
+      "parent": {
+        "scopes": [ "addon_parent" ],
+        "paths": [[ "legacyPrefsApi" ]],
+        "script": "legacyprefsapi/implementation.js"
+      }
     }
   }
 }
