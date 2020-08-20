@@ -1,0 +1,23 @@
+{
+  "extensionName": {
+  "message": "Identity Chooser"
+  },
+  "extensionDescription": {
+    "message": "Identity Chooser helps you to choose the correct identity when composing a new email, replying to one or forwarding it."
+  },
+  "options_generalOptionsTitle": {
+    "message": "General"
+  },
+  "options_icEnableComposeMessage.label": {
+    "message": "Show List of Identities When Clicking on Write button"
+  },
+  "options_icEnableReplayMessage.label": {
+    "message": "Show List of Identities When Clicking on Reply button"
+  },
+  "options_icEnableForwardMessage.label": {
+    "message": "Show List of Identities When Clicking on Forward button"
+  },
+  "options_restart.hint": {
+    "message": "Hint: If you change any of these options you need to restart Thunderbird"
+  }
+}

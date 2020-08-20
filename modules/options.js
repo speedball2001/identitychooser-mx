@@ -50,6 +50,15 @@ export class Options {
 
   async localizePage() {
     console.log("Options#localizePage");
+
+    for (let el of document.querySelectorAll("[data-l10n-id]")) {
+      let id = el.getAttribute("data-l10n-id");
+      let i18nMessage = browser.i18n.getMessage(id);
+      if(i18nMessage == "") {
+        i18nMessage = id;
+      }
+      el.textContent = i18nMessage;
+    }
   }
 
   async updateUI() {
