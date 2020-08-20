@@ -27,7 +27,6 @@ export class Options {
     if(Object.entries(icOptions).length == 0) {
       icOptions = await this.migrateFromTB68Prefs();
 
-      console.log('XXXXXXXXXX');
       console.log(icOptions);
     }
 
