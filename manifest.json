@@ -1,9 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "Identity Chooser",
-  "description": "Identity Chooser helps you to choose the correct identity when composing a new email.",
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
   "version": "2.0",
   "author": "Janek Schwarz",
+  "default_locale": "en",
   "applications": {
     "gecko": {
       "id": "identitychooser@janek.org",
@@ -11,10 +12,14 @@
     }
   },
   "permissions": [
-    "accountsRead", "compose", "activeTab", "tabs", "messagesRead"
+    "accountsRead", "compose", "activeTab", "tabs", "messagesRead", "storage"
   ],
   "background": {
-    "scripts": ["scripts/background.js"]
+    "page": "background.html"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "browser_style": true
   },
  "experiment_apis": {
     "icApi": {

@@ -1,0 +1,23 @@
+{
+  "extensionName": {
+  "message": "Identity Chooser"
+  },
+  "extensionDescription": {
+    "message": "Identity Chooser hilft, die richtige Absendeadresse für das Schreiben, Anwworten oder Weiterleiten einer Email auszuwählen."
+  },
+  "options_generalOptionsTitle": {
+    "message": "Allgemein"
+  },
+  "options_icEnableComposeMessage.label": {
+    "message": "Zeige die Liste der Absendeadressen bei Klick auf den Verfassen-Button"
+  },
+  "options_icEnableReplayMessage.label": {
+    "message": "Zeige die Liste der Absendeadressen bei Klick auf den Antworten-Button"
+  },
+  "options_icEnableForwardMessage.label": {
+    "message": "Zeige die Liste der Absendeadressen bei Klick auf den Weiterleiten-Button"
+  },
+  "options_restart.hint": {
+    "message": "Hinweis: Thunderbird muss neugestartet werden, wenn eine der obigen Optionen geändert wurde."
+  }
+}

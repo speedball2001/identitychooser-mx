@@ -1,40 +1,71 @@
+import { Options } from './modules/options.js';
+
 class IdentityChooser {
   constructor() {
-
+    this.icOptions = new Options();
   }
 
-  run() {
+  async run() {
+    await this.icOptions.setupDefaultOptions();
+
     browser.icApi.onIdentityChosen.addListener((identityId, action, info) => this.identityChosen(identityId, action, info));
 
-    browser.accounts.list().then((accounts) => {
-      for (const account of accounts) {
-        for (const identity of account.identities) {
-          console.log(identity);
-          var icIdentity = this.toIcIdentity(identity);
+    var accounts = await browser.accounts.list();
+    for (const account of accounts) {
+      for (const identity of account.identities) {
+        console.log(identity);
+        var icIdentity = this.toIcIdentity(identity);
 
+        var isEnabledComposeMessage =
+            await this.icOptions.isEnabledComposeMessage();
+        if(isEnabledComposeMessage) {
           browser.icApi.addIdentity(icIdentity, "compose");
+        }
+
+        var isEnabledReplyMessage =
+            await this.icOptions.isEnabledReplyMessage();
+        if(isEnabledReplyMessage) {
           browser.icApi.addIdentity(icIdentity, "reply");
           browser.icApi.addIdentity(icIdentity, "replyAll");
+        }
+
+        var isEnabledForwardMessage =
+            await this.icOptions.isEnabledForwardMessage();
+        if(isEnabledForwardMessage) {
           browser.icApi.addIdentity(icIdentity, "forward");
         }
       }
-    });
-
+    }
 
     //
     // unitialize UI of all open windows
-    browser.windows.getCurrent().then(this.initUI);
+    browser.windows.getCurrent().then((window) => this.initUI(window));
 
     //
     // listen to new window create events to init their UI
-    browser.windows.onCreated.addListener(this.initUI);
+    browser.windows.onCreated.addListener((window) => this.initUI(window));
   }
 
-  initUI(window) {
+  async initUI(window) {
     if(window.type == "normal") {
-      browser.icApi.initComposeMessageAction(window.id);
-      browser.icApi.initReplyMessageAction(window.id);
-      browser.icApi.initForwardMessageAction(window.id);
+
+      var isEnabledComposeMessage =
+          await this.icOptions.isEnabledComposeMessage();
+      if(isEnabledComposeMessage) {
+        browser.icApi.initComposeMessageAction(window.id);
+      }
+
+      var isEnabledReplyMessage =
+          await this.icOptions.isEnabledReplyMessage();
+      if(isEnabledReplyMessage) {
+        browser.icApi.initReplyMessageAction(window.id);
+      }
+
+      var isEnabledForwardMessage =
+          await this.icOptions.isEnabledForwardMessage();
+      if(isEnabledForwardMessage) {
+        browser.icApi.initForwardMessageAction(window.id);
+      }
     }
   }
 
