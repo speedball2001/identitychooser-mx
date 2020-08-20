@@ -8,7 +8,7 @@ var composePrefsApi = class extends ExtensionCommon.ExtensionAPI {
         async getMessageFormat(identityId) {
           console.log(`composePrefsApi.get: ${identityId}`);
 
-          var prefName = `mail.identity.${identityId}.compose_html()`;
+          var prefName = `mail.identity.${identityId}.compose_html`;
           var isHtml = Services.prefs.getBoolPref(prefName, true);
 
           return isHtml ? "text/html" :  "text/plain";
