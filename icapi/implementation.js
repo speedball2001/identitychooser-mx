@@ -162,6 +162,27 @@ class IcButton {
 
     return false;
   }
+
+  keyPressed(event) {
+    console.log(`IcButton#keyPressed: ${event.key}`);
+
+    if(event.ctrlKey && (event.key == this.openPopupKey.toLowerCase() ||
+                         event.key == this.openPopupKey.toUowerCase())) {
+      this.window.document.getElementById(this.buttonId).open = true;
+    }
+  }
+
+  attachKeyToPopup(window, keyId) {
+    var keyElement = window.document.getElementById(keyId);
+
+    if(keyElement) {
+      keyElement.removeAttribute("command");
+      this.openPopupKey = keyElement.getAttribute("key");
+
+      console.log(`IcButton#attachKeyToPopup: ${this.openPopupKey}`);
+      window.addEventListener('keyup', (event) => this.keyPressed(event));
+    }
+  }
 }
 
 class SmartReplyButton extends IcButton {
@@ -210,7 +231,6 @@ class SmartReplyButton extends IcButton {
 
     return popup;
   }
-
 }
 
 var icEventEmitter = new EventEmitter();
@@ -230,6 +250,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           let window = context.extension.windowManager.get(windowId, context).window;
 
           composeButton.attachToWindow(window);
+          composeButton.attachKeyToPopup(window, "key_newMessage2");
         },
         async initReplyMessageAction(windowId) {
           console.log(`icApi.initReplayMessageAction: ${windowId}`);
