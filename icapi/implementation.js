@@ -167,7 +167,7 @@ class IcButton {
     console.log(`IcButton#keyPressed: ${event.key}`);
 
     if(event.ctrlKey && (event.key == this.openPopupKey.toLowerCase() ||
-                         event.key == this.openPopupKey.toUowerCase())) {
+                         event.key == this.openPopupKey.toUpperCase())) {
       this.window.document.getElementById(this.buttonId).open = true;
     }
   }
