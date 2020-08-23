@@ -38,7 +38,7 @@ class IdentityChooser {
     }
 
     //
-    // unitialize UI of all open windows
+    // initialize UI of all open windows
     browser.windows.getCurrent().then((window) => this.initUI(window));
 
     //
