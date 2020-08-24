@@ -14,20 +14,26 @@ export class Options {
   }
 
   async run() {
-    console.log("Options#run");
+    console.debug("Options#run -- begin");
 
     await this.localizePage();
     await this.updateUI();
     await this.setupListeners();
+
+    console.debug("Options#run -- end");
   }
 
   async setupDefaultOptions() {
+    console.debug("Option#setupDefaultOptions -- begin");
+
     var icOptions = await browser.storage.local.get();
+    console.debug('Option#setupDefaultOptions: locally stored option:',  icOptions);
 
     if(Object.entries(icOptions).length == 0) {
+      console.debug('Option#setupDefaultOptions: not stored options -> migrate TB68 prefs to local storage');
       icOptions = await this.migrateFromTB68Prefs();
 
-      console.log(icOptions);
+      console.debug('Option#setupDefaultOptions: found TB68 prefs', icOptions);
     }
 
     for(const [optionName, defaultValue] of Object.entries(this.defaultOptions)) {
@@ -35,27 +41,26 @@ export class Options {
         browser.storage.local.set({ [optionName] : defaultValue});
       }
     }
+
+    console.debug("Option#setupDefaultOptions -- end");
   }
 
   async migrateFromTB68Prefs() {
-    console.log("Options#migrateFromTB68Prefs");
+    console.debug("Options#migrateFromTB68Prefs -- begin");
 
     var ret = {}
     for(const [legacyPrefName, optionName] of Object.entries(this.tb68MigratablePrefs)) {
-      console.log(legacyPrefName);
-      console.log(optionName);
-
       var legacyPrefValue =
           await browser.legacyPrefsApi.get(legacyPrefName,
                                            this.defaultOptions[optionName]);
 
-      console.log(legacyPrefValue);
       if(legacyPrefValue != null) {
         ret[optionName] = legacyPrefValue;
         browser.storage.local.set({ [optionName] : legacyPrefValue });
       }
     }
 
+    console.debug("Options#migrateFromTB68Prefs -- end");
     return ret;
   }
 
