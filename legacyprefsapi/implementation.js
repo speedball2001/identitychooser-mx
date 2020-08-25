@@ -19,6 +19,8 @@ var legacyPrefsApi = class extends ExtensionCommon.ExtensionAPI {
 
         // get may only return something, if a value is set
         get: async function(aName, aDefault) {
+          console.debug('legacyPrefsApi#get -- begin');
+          console.debug(`legacyPrefsApi#get aName: ${aName}, aDefault: ${aDefault}`);
           let prefType = Services.prefs.getPrefType(aName);
           if (prefType == Services.prefs.PREF_INVALID) {
             return null;
@@ -29,19 +31,21 @@ var legacyPrefsApi = class extends ExtensionCommon.ExtensionAPI {
           }
 
           switch (typeof aDefault) {
-            case "string":
-                return Services.prefs.getCharPref(aName, aDefault);
+          case "string":
+            console.debug('legacyPrefsApi#get -- end');
+            return Services.prefs.getCharPref(aName, aDefault);
 
-            case "number":
-                return Services.prefs.getIntPref(aName, aDefault);
+          case "number":
+            console.debug('legacyPrefsApi#get -- end');
+            return Services.prefs.getIntPref(aName, aDefault);
 
-            case "boolean":
-                return Services.prefs.getBoolPref(aName, aDefault);
+          case "boolean":
+            console.debug('legacyPrefsApi#get -- end');
+            return Services.prefs.getBoolPref(aName, aDefault);
 
             default:
               throw new Error("Preference <" + aName + "> has an unsupported type <" + typeof aDefault + ">. Allowed are string, number and boolean.");
           }
-
         },
 
         clear: async function(aName) {
