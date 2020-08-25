@@ -113,7 +113,8 @@ class IdentityChooser {
   }
 
   async identityChosen(identityId, action, info) {
-    console.debug(`IdentityChooser#background#identityChosen ${identityId}, ${action}, ${info}`)
+    console.debug('IdentityChooser#identityChosen -- begin');
+    console.debug(`IdentityChooser#identityChosen: identityId: ${identityId}, action: ${action}, info: ${info}`);
 
     var messageFormat = await browser.composePrefsApi.getMessageFormat(identityId);
 
@@ -125,7 +126,9 @@ class IdentityChooser {
         }
     }
 
+    console.debug('IdentityChooser#identityChosen: messageFormat: ', messageFormat);
     if(action == "compose") {
+      console.debug('IdentityChooser#identityChosen: open compose editor');
       if(messageFormat == "text/plain") {
         browser.compose.beginNew({
           "identityId": identityId,
@@ -143,7 +146,7 @@ class IdentityChooser {
       var tabs = await browser.tabs.query({ active: true, currentWindow: true });
       for (let tab of tabs) {
         var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
-
+        console.debug('IdentityChooser#identityChosen: reply to message: ', msg);
         if(messageFormat == "text/plain") {
           browser.compose.beginReply(msg.id,
                                      "replyToSender",
@@ -165,6 +168,8 @@ class IdentityChooser {
       for (let tab of tabs) {
         var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
 
+        console.debug('IdentityChooser#identityChosen: reply all to  message: ',
+                      msg);
         if(messageFormat == "text/plain") {
           browser.compose.beginReply(msg.id,
                                      "replyToAll",
@@ -183,12 +188,16 @@ class IdentityChooser {
       }
     } else if(action == "forward") {
       var forwardType = await browser.composePrefsApi.getForwardType();
+      console.debug('IdentityChooser#identityChosen: forwardType: ',
+                    forwardType);
 
       var tabs = await browser.tabs.query({ active: true, currentWindow: true });
       for (let tab of tabs) {
         var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
         var window = await browser.windows.getCurrent();
 
+        console.debug('IdentityChooser#identityChosen: forward  message: ',
+                      msg);
         if(!info.includes("Shift")) {
           browser.icForwardApi.beginForward(msg,
                                             forwardType,
@@ -205,6 +214,8 @@ class IdentityChooser {
         }
       }
     }
+
+    console.debug('IdentityChooser#identityChosen -- end');
   }
 }
 

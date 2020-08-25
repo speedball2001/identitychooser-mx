@@ -246,29 +246,43 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
     return {
       icApi: {
         async initComposeMessageAction(windowId) {
-          console.log(`icApi.initComposeMessageAction: ${windowId}`);
+          console.debug('icApi#initComposeMessageAction -- begin');
+          console.debug(`icApi.initComposeMessageAction: window id: ${windowId}`);
+
           let window = context.extension.windowManager.get(windowId, context).window;
 
           composeButton.attachToWindow(window);
           composeButton.attachKeyToPopup(window, "key_newMessage2");
+
+          console.debug('icApi#initComposeMessageAction -- end');
         },
         async initReplyMessageAction(windowId) {
-          console.log(`icApi.initReplayMessageAction: ${windowId}`);
+          console.debug('icApi#initReplyMessageAction -- begin');
+          console.debug(`icApi.initReplyMessageAction: window id: ${windowId}`);
+
           let window = context.extension.windowManager.get(windowId, context).window;
 
           replyButton.attachToWindow(window);
           replyToSenderButton.attachToWindow(window);
           replyAllButton.attachToWindow(window);
+
+          console.debug('icApi#initReplyMessageAction -- end');
         },
         async initForwardMessageAction(windowId) {
-          console.log(`icApi.initForwardMessageAction: ${windowId}`);
+          console.debug('icApi#initForwardMessageAction -- begin');
+          console.debug(`icApi.initForwardMessageAction: window id: ${windowId}`);
+
+
           let window = context.extension.windowManager.get(windowId, context).window;
 
           forwardButton.attachToWindow(window);
+
+          console.debug('icApi#initForwardMessageAction -- end');
         },
 
         async addIdentity(identity, action) {
-          console.log(`icApi.addIdentiy: ${identity}, ${action}`);
+          console.debug('icApi#addIdentity -- begin');
+          console.log('icApi.addIdentiy: identity: ', identity, 'action: ', action);
 
           if(action == "compose") {
             composeButton.addIdentity(identity);
@@ -280,6 +294,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           } else if(action == "forward") {
             forwardButton.addIdentity(identity);
           }
+
+          console.debug('icApi#addIdentity -- end');
         },
         onIdentityChosen: new ExtensionCommon.EventManager({
           context,
