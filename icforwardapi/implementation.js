@@ -12,9 +12,9 @@ var icForwardApi = class extends ExtensionCommon.ExtensionAPI {
       icForwardApi: {
         async beginForward(message, forwardType, details) {
           console.debug('icForwardApi#beginForward -- begin');
-          console.log('icForwardApi#beginForward: message: ', message,
-                      'forwardType: ', forwardType,
-                      'details: ', details);
+          console.debug('icForwardApi#beginForward: message: ', message,
+                        'forwardType: ', forwardType,
+                        'details: ', details);
 
           let type = Ci.nsIMsgCompType.ForwardInline;
           if (forwardType == "forwardAsAttachment") {

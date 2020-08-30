@@ -88,7 +88,7 @@ export class Options {
   }
 
   async localizePage() {
-    console.log("Options#localizePage");
+    console.debug("Options#localizePage -- start");
 
     for (let el of document.querySelectorAll("[data-l10n-id]")) {
       let id = el.getAttribute("data-l10n-id");
@@ -98,16 +98,14 @@ export class Options {
       }
       el.textContent = i18nMessage;
     }
+
+    console.debug("Options#localizePage -- end");
   }
 
   async updateUI() {
     var options = await browser.storage.local.get();
 
-    console.log(options);
-
     for (const [optionName, optionValue] of Object.entries(options)) {
-      console.log(`${optionName}: ${optionValue}`);
-
       var optionElement = document.getElementById(optionName);
 
       if(optionElement.tagName == "INPUT" &&
@@ -119,14 +117,10 @@ export class Options {
   }
 
   async setupListeners() {
-    console.log("Options#setupListeners");
-
     document.addEventListener("change", this.optionChanged);
   }
 
   async optionChanged(e) {
-    console.log("Options#optionChanged");
-
     if(e == null) {
       return;
     }
@@ -136,14 +130,9 @@ export class Options {
       var optionName = e.target.id;
       var optionValue = e.target.checked;
 
-      console.log(optionName);
-      console.log(optionValue);
-
       await browser.storage.local.set({
         [optionName]: optionValue
       });
-
-      console.log("nach browser.storage.local.set");
     }
   }
 }
