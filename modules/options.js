@@ -103,17 +103,26 @@ export class Options {
   }
 
   async updateUI() {
+    console.debug("Options#updateUI -- start");
+
     var options = await browser.storage.local.get();
 
     for (const [optionName, optionValue] of Object.entries(options)) {
-      var optionElement = document.getElementById(optionName);
+      console.debug("Options#updateUI: option: ", optionName,
+                    "value: ", optionValue);
 
-      if(optionElement.tagName == "INPUT" &&
-         optionElement.type == "checkbox") {
+      if (optionName in this.defaultOptions) {
+        var optionElement = document.getElementById(optionName);
 
-        optionElement.checked = optionValue;
+        if(optionElement.tagName == "INPUT" &&
+           optionElement.type == "checkbox") {
+
+          optionElement.checked = optionValue;
+        }
       }
     }
+
+    console.debug("Options#updateUI -- end");
   }
 
   async setupListeners() {
