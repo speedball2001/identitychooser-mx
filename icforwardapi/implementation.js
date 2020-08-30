@@ -11,7 +11,10 @@ var icForwardApi = class extends ExtensionCommon.ExtensionAPI {
     return {
       icForwardApi: {
         async beginForward(message, forwardType, details) {
-          console.log(`icForwardApi.beginForward: ${message}, ${forwardType}, ${details}`);
+          console.debug('icForwardApi#beginForward -- begin');
+          console.debug('icForwardApi#beginForward: message: ', message,
+                        'forwardType: ', forwardType,
+                        'details: ', details);
 
           let type = Ci.nsIMsgCompType.ForwardInline;
           if (forwardType == "forwardAsAttachment") {
@@ -23,8 +26,6 @@ var icForwardApi = class extends ExtensionCommon.ExtensionAPI {
             format = Ci.nsIMsgCompFormat.OppositeOfDefault;
           }
 
-          console.log(format);
-
           if(message) {
             let msgHdr = context.extension.messageManager.get(message.id);
             let msgURI = msgHdr.folder.getUriForMsg(msgHdr);
@@ -33,6 +34,7 @@ var icForwardApi = class extends ExtensionCommon.ExtensionAPI {
               i => i.key == details.identityId
             );
 
+            console.debug('icForwardApi#beginForward: open compose window');
             MailServices.compose.OpenComposeWindow(null,
                                                    msgHdr,
                                                    msgURI,
@@ -44,7 +46,7 @@ var icForwardApi = class extends ExtensionCommon.ExtensionAPI {
           }
 
 
-          return null;
+          console.debug('icForwardApi#beginForward -- end');
         },
       }
     }

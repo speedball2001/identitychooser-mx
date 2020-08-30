@@ -14,20 +14,26 @@ export class Options {
   }
 
   async run() {
-    console.log("Options#run");
+    console.debug("Options#run -- begin");
 
     await this.localizePage();
     await this.updateUI();
     await this.setupListeners();
+
+    console.debug("Options#run -- end");
   }
 
   async setupDefaultOptions() {
+    console.debug("Option#setupDefaultOptions -- begin");
+
     var icOptions = await browser.storage.local.get();
+    console.debug('Option#setupDefaultOptions: locally stored option:',  icOptions);
 
     if(Object.entries(icOptions).length == 0) {
+      console.debug('Option#setupDefaultOptions: not stored options -> migrate TB68 prefs to local storage');
       icOptions = await this.migrateFromTB68Prefs();
 
-      console.log(icOptions);
+      console.debug('Option#setupDefaultOptions: found TB68 prefs', icOptions);
     }
 
     for(const [optionName, defaultValue] of Object.entries(this.defaultOptions)) {
@@ -35,27 +41,26 @@ export class Options {
         browser.storage.local.set({ [optionName] : defaultValue});
       }
     }
+
+    console.debug("Option#setupDefaultOptions -- end");
   }
 
   async migrateFromTB68Prefs() {
-    console.log("Options#migrateFromTB68Prefs");
+    console.debug("Options#migrateFromTB68Prefs -- begin");
 
     var ret = {}
     for(const [legacyPrefName, optionName] of Object.entries(this.tb68MigratablePrefs)) {
-      console.log(legacyPrefName);
-      console.log(optionName);
-
       var legacyPrefValue =
           await browser.legacyPrefsApi.get(legacyPrefName,
                                            this.defaultOptions[optionName]);
 
-      console.log(legacyPrefValue);
       if(legacyPrefValue != null) {
         ret[optionName] = legacyPrefValue;
         browser.storage.local.set({ [optionName] : legacyPrefValue });
       }
     }
 
+    console.debug("Options#migrateFromTB68Prefs -- end");
     return ret;
   }
 
@@ -83,7 +88,7 @@ export class Options {
   }
 
   async localizePage() {
-    console.log("Options#localizePage");
+    console.debug("Options#localizePage -- start");
 
     for (let el of document.querySelectorAll("[data-l10n-id]")) {
       let id = el.getAttribute("data-l10n-id");
@@ -93,35 +98,38 @@ export class Options {
       }
       el.textContent = i18nMessage;
     }
+
+    console.debug("Options#localizePage -- end");
   }
 
   async updateUI() {
+    console.debug("Options#updateUI -- start");
+
     var options = await browser.storage.local.get();
 
-    console.log(options);
-
     for (const [optionName, optionValue] of Object.entries(options)) {
-      console.log(`${optionName}: ${optionValue}`);
+      console.debug("Options#updateUI: option: ", optionName,
+                    "value: ", optionValue);
 
-      var optionElement = document.getElementById(optionName);
+      if (optionName in this.defaultOptions) {
+        var optionElement = document.getElementById(optionName);
 
-      if(optionElement.tagName == "INPUT" &&
-         optionElement.type == "checkbox") {
+        if(optionElement.tagName == "INPUT" &&
+           optionElement.type == "checkbox") {
 
-        optionElement.checked = optionValue;
+          optionElement.checked = optionValue;
+        }
       }
     }
+
+    console.debug("Options#updateUI -- end");
   }
 
   async setupListeners() {
-    console.log("Options#setupListeners");
-
     document.addEventListener("change", this.optionChanged);
   }
 
   async optionChanged(e) {
-    console.log("Options#optionChanged");
-
     if(e == null) {
       return;
     }
@@ -131,14 +139,9 @@ export class Options {
       var optionName = e.target.id;
       var optionValue = e.target.checked;
 
-      console.log(optionName);
-      console.log(optionValue);
-
       await browser.storage.local.set({
         [optionName]: optionValue
       });
-
-      console.log("nach browser.storage.local.set");
     }
   }
 }
