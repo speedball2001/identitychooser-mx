@@ -13,16 +13,6 @@ export class Options {
     }
   }
 
-  async run() {
-    console.debug("Options#run -- begin");
-
-    await this.localizePage();
-    await this.updateUI();
-    await this.setupListeners();
-
-    console.debug("Options#run -- end");
-  }
-
   async setupDefaultOptions() {
     console.debug("Option#setupDefaultOptions -- begin");
 
@@ -87,61 +77,11 @@ export class Options {
     return ret;
   }
 
-  async localizePage() {
-    console.debug("Options#localizePage -- start");
-
-    for (let el of document.querySelectorAll("[data-l10n-id]")) {
-      let id = el.getAttribute("data-l10n-id");
-      let i18nMessage = browser.i18n.getMessage(id);
-      if(i18nMessage == "") {
-        i18nMessage = id;
-      }
-      el.textContent = i18nMessage;
-    }
-
-    console.debug("Options#localizePage -- end");
+  async getAllOptions() {
+    return browser.storage.local.get();
   }
 
-  async updateUI() {
-    console.debug("Options#updateUI -- start");
-
-    var options = await browser.storage.local.get();
-
-    for (const [optionName, optionValue] of Object.entries(options)) {
-      console.debug("Options#updateUI: option: ", optionName,
-                    "value: ", optionValue);
-
-      if (optionName in this.defaultOptions) {
-        var optionElement = document.getElementById(optionName);
-
-        if(optionElement.tagName == "INPUT" &&
-           optionElement.type == "checkbox") {
-
-          optionElement.checked = optionValue;
-        }
-      }
-    }
-
-    console.debug("Options#updateUI -- end");
-  }
-
-  async setupListeners() {
-    document.addEventListener("change", this.optionChanged);
-  }
-
-  async optionChanged(e) {
-    if(e == null) {
-      return;
-    }
-
-    if(e.target.tagName == "INPUT" &&
-       e.target.type == "checkbox") {
-      var optionName = e.target.id;
-      var optionValue = e.target.checked;
-
-      await browser.storage.local.set({
-        [optionName]: optionValue
-      });
-    }
+  async storeOption(o) {
+    return browser.storage.local.set(o);
   }
 }
