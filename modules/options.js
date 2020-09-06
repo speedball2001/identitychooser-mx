@@ -13,16 +13,6 @@ export class Options {
     }
   }
 
-  async run() {
-    console.debug("Options#run -- begin");
-
-    await this.localizePage();
-    await this.updateUI();
-    await this.setupListeners();
-
-    console.debug("Options#run -- end");
-  }
-
   async setupDefaultOptions() {
     console.debug("Option#setupDefaultOptions -- begin");
 
@@ -40,6 +30,38 @@ export class Options {
       if(!(optionName in icOptions)) {
         browser.storage.local.set({ [optionName] : defaultValue});
       }
+    }
+
+    console.debug("Options#setupDefaultOptions: set extended properties");
+    var identitiesProps = {};
+    if('identitiesExtendedProps' in icOptions) {
+      identitiesProps = icOptions['identitiesExtendedProps'];
+    }
+
+    var newIdentities = {};
+    var nextPositionInMenu = Object.entries(identitiesProps).length;
+    var accounts = await browser.accounts.list();
+    for (const account of accounts) {
+      for (const identity of account.identities) {
+        if(!(identity.id in identitiesProps)) {
+          newIdentities[identity.id] = {
+            'showInMenu': true,
+            'positionInMenu': nextPositionInMenu++
+          };
+        }
+      }
+    }
+
+
+    if(Object.entries(newIdentities).length > 0) {
+      console.debug("Options#setupDefaultOptions: found new identities",
+                    newIdentities);
+      var identitiesProps = {...identitiesProps, ...newIdentities};
+      await browser.storage.local.set(
+        { 'identitiesExtendedProps' : identitiesProps});
+
+      console.debug("Options#setupDefaultOptions: stored extended properties",
+                    identitiesProps);
     }
 
     console.debug("Option#setupDefaultOptions -- end");
@@ -87,61 +109,21 @@ export class Options {
     return ret;
   }
 
-  async localizePage() {
-    console.debug("Options#localizePage -- start");
-
-    for (let el of document.querySelectorAll("[data-l10n-id]")) {
-      let id = el.getAttribute("data-l10n-id");
-      let i18nMessage = browser.i18n.getMessage(id);
-      if(i18nMessage == "") {
-        i18nMessage = id;
-      }
-      el.textContent = i18nMessage;
-    }
-
-    console.debug("Options#localizePage -- end");
+  async getAllOptions() {
+    return browser.storage.local.get();
   }
 
-  async updateUI() {
-    console.debug("Options#updateUI -- start");
-
-    var options = await browser.storage.local.get();
-
-    for (const [optionName, optionValue] of Object.entries(options)) {
-      console.debug("Options#updateUI: option: ", optionName,
-                    "value: ", optionValue);
-
-      if (optionName in this.defaultOptions) {
-        var optionElement = document.getElementById(optionName);
-
-        if(optionElement.tagName == "INPUT" &&
-           optionElement.type == "checkbox") {
-
-          optionElement.checked = optionValue;
-        }
-      }
-    }
-
-    console.debug("Options#updateUI -- end");
+  async storeOption(o) {
+    return browser.storage.local.set(o);
   }
 
-  async setupListeners() {
-    document.addEventListener("change", this.optionChanged);
+  async getIdentitiesExtendedProps() {
+    var props = await browser.storage.local.get('identitiesExtendedProps');
+
+    return props['identitiesExtendedProps'];
   }
 
-  async optionChanged(e) {
-    if(e == null) {
-      return;
-    }
-
-    if(e.target.tagName == "INPUT" &&
-       e.target.type == "checkbox") {
-      var optionName = e.target.id;
-      var optionValue = e.target.checked;
-
-      await browser.storage.local.set({
-        [optionName]: optionValue
-      });
-    }
+  async storeIdentitiesExtendedProps(props) {
+    return browser.storage.local.set({identitiesExtendedProps: props});
   }
 }

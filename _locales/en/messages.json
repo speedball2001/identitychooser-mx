@@ -5,6 +5,9 @@
   "extensionDescription": {
     "message": "Identity Chooser helps you to choose the correct identity when composing a new email, replying to one or forwarding it."
   },
+  "options_optionsPageTitle": {
+    "message": "Identity Chooser -- Settings"
+  },
   "options_generalOptionsTitle": {
     "message": "General"
   },
@@ -19,5 +22,11 @@
   },
   "options_restart.hint": {
     "message": "Hint: If you change any of these options you need to restart Thunderbird"
+  },
+  "options_sortOptionsTitle": {
+    "message": "Sort Order"
+  },
+  "options_sortOrder.hint": {
+    "message": "Resort the idendities here using drag and drop:"
   }
 }

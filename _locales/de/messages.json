@@ -5,6 +5,9 @@
   "extensionDescription": {
     "message": "Identity Chooser hilft, die richtige Absendeadresse für das Schreiben, Anwworten oder Weiterleiten einer Email auszuwählen."
   },
+  "options_optionsPageTitle": {
+    "message": "Identity Chooser -- Einstellungen"
+  },
   "options_generalOptionsTitle": {
     "message": "Allgemein"
   },
@@ -19,5 +22,11 @@
   },
   "options_restart.hint": {
     "message": "Hinweis: Thunderbird muss neugestartet werden, wenn eine der obigen Optionen geändert wurde."
+  },
+  "options_sortOptionsTitle": {
+    "message": "Sortierung"
+  },
+  "options_sortOrder.hint": {
+    "message": "Die Reihenfolge der Absender kann hier mittels Drag and Drop geändert werden:"
   }
 }

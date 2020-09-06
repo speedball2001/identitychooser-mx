@@ -3,8 +3,10 @@
 <html>
   <head>
     <meta charset="utf-8"/>
+    <script src="../Sortable.js" defer></script>
     <script type="module" src="options.js" defer></script>
     <link rel="stylesheet" type="text/css" href="options.css"/>
+    <title data-l10n-id="options_optionsPageTitle">Identity Chooser</title>
   </head>
 
   <body>
@@ -26,8 +28,19 @@
         <input id="icEnableForwardMessage" type="checkbox"/>
         <label for="icEnableForwardMessage" data-l10n-id="options_icEnableForwardMessage.label">icEnableForwardMessage</label>
       </div>
-
-      <p data-l10n-id="options_restart.hint">If you change any of these options you need to restart Thunderbird</p>
     </section>
+
+    <section class"icSortOrder">
+      <h1 class="title" data-l10n-id="options_sortOptionsTitle">Sortierung</h1>
+
+      <p data-l10n-id="options_sortOrder.hint">Resort the identities using drag and drop.</p>
+
+      <div id="icIdentitySortList" class="list-group col">
+	<!-- <div class="list-group-item">Ex Ample <ex@ample.com></div> -->
+      </div>
+    </section>
+
+    <p data-l10n-id="options_restart.hint">If you change any of these options you need to restart Thunderbird</p>
+
   </body>
 </html>
