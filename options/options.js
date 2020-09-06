@@ -115,7 +115,25 @@ class OptionsUI {
 
   async identitiesSorted(e) {
     console.debug("OptionsUI#identitiesSorted -- begin");
-    console.debug(e);
+
+    var domIcIdentitySortList =
+        document.getElementById("icIdentitySortList");
+
+    var positionInMenu = 0;
+    var extendedProperties = {};
+    for(const domIdentity of domIcIdentitySortList.children) {
+      var identityId = domIdentity.getAttribute("identityId");
+
+      extendedProperties[identityId] = {
+        'showInMenu': true,
+        'positionInMenu': positionInMenu++
+      }
+    }
+
+    console.debug("OptionsUI#identitiesSorted -- new sort order: ",
+                 extendedProperties);
+    await this.optionsBackend.storeIdentitiesExtendedProps(extendedProperties);
+
     console.debug("OptionsUI#identitiesSorted -- end");
   }
 }

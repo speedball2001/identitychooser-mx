@@ -122,4 +122,8 @@ export class Options {
 
     return props['identitiesExtendedProps'];
   }
+
+  async storeIdentitiesExtendedProps(props) {
+    return browser.storage.local.set({identitiesExtendedProps: props});
+  }
 }
