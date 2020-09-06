@@ -25,5 +25,8 @@
   },
   "options_sortOptionsTitle": {
     "message": "Sort Order"
+  },
+  "options_sortOrder.hint": {
+    "message": "Resort the idendities here using drag and drop:"
   }
 }

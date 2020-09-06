@@ -25,6 +25,8 @@
   },
   "options_sortOptionsTitle": {
     "message": "Sortierung"
+  },
+  "options_sortOrder.hint": {
+    "message": "Die Reihenfolge der Absender kann hier mittels Drag and Drop geändert werden:"
   }
-
 }

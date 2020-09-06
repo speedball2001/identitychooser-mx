@@ -1,4 +1,5 @@
 import { Options } from './modules/options.js';
+import { IcIdentities } from '../modules/identities.js';
 
 class IdentityChooser {
   constructor() {
@@ -14,43 +15,46 @@ class IdentityChooser {
     console.debug('IdentityChooser#run: onIdentityChosen listener registered');
 
     console.debug('IdentityChooser#run: iterate over accounts and identities');
-    var accounts = await browser.accounts.list();
-    for (const account of accounts) {
-      for (const identity of account.identities) {
-        console.debug(`IdentityChooser#run: found ${identity.accountId}, ${identity.id}`);
-        var icIdentity = this.toIcIdentity(identity);
+    var icIdentities = new IcIdentities(this.icOptions);
+    var identities = await icIdentities.getIdentities();
 
-        var isEnabledComposeMessage =
-            await this.icOptions.isEnabledComposeMessage();
-        if(isEnabledComposeMessage) {
-          console.debug('IdentityChooser#run: add identity ',
-                        icIdentity,
-                        'to compose');
-          browser.icApi.addIdentity(icIdentity, "compose");
-        }
+    for (const identity of identities) {
+      console.debug(`IdentityChooser#run: found ${identity.accountId}, ${identity.id}`);
+      var icIdentity = {
+        "id": identity.id,
+        "label": identity.label
+      }
 
-        var isEnabledReplyMessage =
-            await this.icOptions.isEnabledReplyMessage();
-        if(isEnabledReplyMessage) {
-          console.debug('IdentityChooser#run: add identity ',
-                        icIdentity,
-                        'to reply');
-          browser.icApi.addIdentity(icIdentity, "reply");
+      var isEnabledComposeMessage =
+          await this.icOptions.isEnabledComposeMessage();
+      if(isEnabledComposeMessage) {
+        console.debug('IdentityChooser#run: add identity ',
+                      icIdentity,
+                      'to compose');
+        browser.icApi.addIdentity(icIdentity, "compose");
+      }
 
-          console.debug('IdentityChooser#run: add identity ',
-                        icIdentity,
-                        'to replyAll');
-          browser.icApi.addIdentity(icIdentity, "replyAll");
-        }
+      var isEnabledReplyMessage =
+          await this.icOptions.isEnabledReplyMessage();
+      if(isEnabledReplyMessage) {
+        console.debug('IdentityChooser#run: add identity ',
+                      icIdentity,
+                      'to reply');
+        browser.icApi.addIdentity(icIdentity, "reply");
 
-        var isEnabledForwardMessage =
-            await this.icOptions.isEnabledForwardMessage();
-        if(isEnabledForwardMessage) {
-          console.debug('IdentityChooser#run: add identity ',
-                        icIdentity,
-                        'to forward');
-          browser.icApi.addIdentity(icIdentity, "forward");
-        }
+        console.debug('IdentityChooser#run: add identity ',
+                      icIdentity,
+                      'to replyAll');
+        browser.icApi.addIdentity(icIdentity, "replyAll");
+      }
+
+      var isEnabledForwardMessage =
+          await this.icOptions.isEnabledForwardMessage();
+      if(isEnabledForwardMessage) {
+        console.debug('IdentityChooser#run: add identity ',
+                      icIdentity,
+                      'to forward');
+        browser.icApi.addIdentity(icIdentity, "forward");
       }
     }
 
@@ -94,22 +98,6 @@ class IdentityChooser {
     }
 
     console.debug("IdentityChooser#initUI -- end");
-  }
-
-  toIcIdentity(mailIdentity) {
-    let name = mailIdentity.name;
-    let email = mailIdentity.email;
-
-    let label;
-    if(name != '') {
-      label = `${name} <${email}>`;
-    } else {
-      label = email;
-    }
-    return {
-      "label": label,
-      id: mailIdentity.id
-    }
   }
 
   async identityChosen(identityId, action, info) {
