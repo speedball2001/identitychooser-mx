@@ -5,6 +5,9 @@
   "extensionDescription": {
     "message": "Identity Chooser hilft, die richtige Absendeadresse für das Schreiben, Anwworten oder Weiterleiten einer Email auszuwählen."
   },
+  "options_optionsPageTitle": {
+    "message": "Identity Chooser -- Einstellungen"
+  },
   "options_generalOptionsTitle": {
     "message": "Allgemein"
   },
