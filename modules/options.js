@@ -32,6 +32,38 @@ export class Options {
       }
     }
 
+    console.debug("Options#setupDefaultOptions: set extended properties");
+    var identitiesProps = {};
+    if('identitiesExtendedProps' in icOptions) {
+      identitiesProps = icOptions['identitiesExtendedProps'];
+    }
+
+    var newIdentities = {};
+    var nextPositionInMenu = Object.entries(identitiesProps).length;
+    var accounts = await browser.accounts.list();
+    for (const account of accounts) {
+      for (const identity of account.identities) {
+        if(!(identity.id in identitiesProps)) {
+          newIdentities[identity.id] = {
+            'showInMenu': true,
+            'positionInMenu': nextPositionInMenu++
+          };
+        }
+      }
+    }
+
+
+    if(Object.entries(newIdentities).length > 0) {
+      console.debug("Options#setupDefaultOptions: found new identities",
+                    newIdentities);
+      var identitiesProps = {...identitiesProps, ...newIdentities};
+      await browser.storage.local.set(
+        { 'identitiesExtendedProps' : identitiesProps});
+
+      console.debug("Options#setupDefaultOptions: stored extended properties",
+                    identitiesProps);
+    }
+
     console.debug("Option#setupDefaultOptions -- end");
   }
 
@@ -83,5 +115,11 @@ export class Options {
 
   async storeOption(o) {
     return browser.storage.local.set(o);
+  }
+
+  async getIdentitiesExtendedProps() {
+    var props = await browser.storage.local.get('identitiesExtendedProps');
+
+    return props['identitiesExtendedProps'];
   }
 }

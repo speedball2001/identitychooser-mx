@@ -22,5 +22,8 @@
   },
   "options_restart.hint": {
     "message": "Hint: If you change any of these options you need to restart Thunderbird"
+  },
+  "options_sortOptionsTitle": {
+    "message": "Sort Order"
   }
 }

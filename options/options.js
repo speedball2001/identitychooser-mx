@@ -1,4 +1,5 @@
 import { Options } from '../modules/options.js';
+import { IcIdentities } from '../modules/identities.js';
 
 class OptionsUI {
   constructor(options) {
@@ -11,11 +12,6 @@ class OptionsUI {
     await this.localizePage();
     await this.updateUI();
     await this.setupListeners();
-
-    new Sortable(example1, {
-      animation: 150,
-      ghostClass: 'blue-background-class'
-    });
 
     console.debug("OptionsUI#init -- end");
   }
@@ -40,6 +36,7 @@ class OptionsUI {
 
     var options = await this.optionsBackend.getAllOptions();
 
+    console.debug("OptionsUI#updateUI: sync options to UI");
     for (const [optionName, optionValue] of Object.entries(options)) {
       console.debug("OptionsUI#updateUI: option: ", optionName,
                     "value: ", optionValue);
@@ -55,7 +52,45 @@ class OptionsUI {
       }
     }
 
+    console.debug("OptionsUI#updateUI: populate identity sort list");
+    var icIdentities = new IcIdentities(this.optionsBackend);
+    var identities = await icIdentities.getIdentities();
+    var domIcIdentitySortList =
+        document.getElementById("icIdentitySortList");
+
+    for(const identity of identities) {
+      console.debug("OptionsUI#updateUI: add identity ", identity.label);
+      var identityDiv = document.createElement("div");
+      identityDiv.classList.add("list-group-item");
+      identityDiv.appendChild(document.createTextNode(identity.label));
+      identityDiv.setAttribute("identityId", identity.id);
+      domIcIdentitySortList.appendChild(identityDiv);
+      console.debug("OptionsUI#updateUI: added identity ", identity.label);
+    }
+
+    new Sortable(domIcIdentitySortList, {
+      animation: 150,
+      ghostClass: 'blue-background-class',
+      onSort: (e) => this.identitiesSorted(e)
+    });
+
     console.debug("OptionsUI#updateUI -- end");
+  }
+
+  toIcIdentity(mailIdentity) {
+    let name = mailIdentity.name;
+    let email = mailIdentity.email;
+
+    let label;
+    if(name != '') {
+      label = `${name} <${email}>`;
+    } else {
+      label = email;
+    }
+    return {
+      "label": label,
+      id: mailIdentity.id
+    }
   }
 
   async setupListeners() {
@@ -76,6 +111,12 @@ class OptionsUI {
         [optionName]: optionValue
       });
     }
+  }
+
+  async identitiesSorted(e) {
+    console.debug("OptionsUI#identitiesSorted -- begin");
+    console.debug(e);
+    console.debug("OptionsUI#identitiesSorted -- end");
   }
 }
 

@@ -22,5 +22,9 @@
   },
   "options_restart.hint": {
     "message": "Hinweis: Thunderbird muss neugestartet werden, wenn eine der obigen Optionen geändert wurde."
+  },
+  "options_sortOptionsTitle": {
+    "message": "Sortierung"
   }
+
 }
