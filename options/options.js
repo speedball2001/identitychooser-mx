@@ -44,9 +44,7 @@ class OptionsUI {
       if (optionName in this.optionsBackend.defaultOptions) {
         var optionElement = document.getElementById(optionName);
 
-        if(optionElement.tagName == "INPUT" &&
-           optionElement.type == "checkbox") {
-
+        if(optionElement.classList.contains("icGeneralOption")) {
           optionElement.checked = optionValue;
         }
       }
@@ -71,7 +69,7 @@ class OptionsUI {
     new Sortable(domIcIdentitySortList, {
       animation: 150,
       ghostClass: 'blue-background-class',
-      onSort: (e) => this.identitiesSorted(e)
+      onSort: (e) => this.identitiesChanged(e)
     });
 
     console.debug("OptionsUI#updateUI -- end");
@@ -113,8 +111,8 @@ class OptionsUI {
     }
   }
 
-  async identitiesSorted(e) {
-    console.debug("OptionsUI#identitiesSorted -- begin");
+  async identitiesChanged(e) {
+    console.debug("OptionsUI#identitiesChanged -- begin");
 
     var domIcIdentitySortList =
         document.getElementById("icIdentitySortList");
@@ -130,11 +128,11 @@ class OptionsUI {
       }
     }
 
-    console.debug("OptionsUI#identitiesSorted -- new sort order: ",
+    console.debug("OptionsUI#identitiesChanged -- new sort order: ",
                  extendedProperties);
     await this.optionsBackend.storeIdentitiesExtendedProps(extendedProperties);
 
-    console.debug("OptionsUI#identitiesSorted -- end");
+    console.debug("OptionsUI#identitiesChanged -- end");
   }
 }
 
