@@ -58,10 +58,26 @@ class OptionsUI {
 
     for(const identity of identities) {
       console.debug("OptionsUI#updateUI: add identity ", identity.label);
+
+      // Create drag'n'drop row for an identity
       var identityDiv = document.createElement("div");
       identityDiv.classList.add("list-group-item");
-      identityDiv.appendChild(document.createTextNode(identity.label));
-      identityDiv.setAttribute("identityId", identity.id);
+
+      // Create show in menu checkbox and add it to the row
+      var showInMenuInput = document.createElement("input");
+      showInMenuInput.setAttribute("type", "checkbox");
+      showInMenuInput.checked = identity.showInMenu;
+      showInMenuInput.addEventListener("change", (e) => this.identitiesChanged(e));
+      identityDiv.appendChild(showInMenuInput);
+
+      // Create identity label and add it to the row
+      var identityLabelDiv = document.createElement("div");
+      identityLabelDiv.appendChild(document.createTextNode(identity.label));
+      identityLabelDiv.setAttribute("identityId", identity.id);
+
+      identityDiv.appendChild(identityLabelDiv);
+
+      // Add row to identity list
       domIcIdentitySortList.appendChild(identityDiv);
       console.debug("OptionsUI#updateUI: added identity ", identity.label);
     }
@@ -73,22 +89,6 @@ class OptionsUI {
     });
 
     console.debug("OptionsUI#updateUI -- end");
-  }
-
-  toIcIdentity(mailIdentity) {
-    let name = mailIdentity.name;
-    let email = mailIdentity.email;
-
-    let label;
-    if(name != '') {
-      label = `${name} <${email}>`;
-    } else {
-      label = email;
-    }
-    return {
-      "label": label,
-      id: mailIdentity.id
-    }
   }
 
   async setupListeners() {
@@ -120,10 +120,14 @@ class OptionsUI {
     var positionInMenu = 0;
     var extendedProperties = {};
     for(const domIdentity of domIcIdentitySortList.children) {
-      var identityId = domIdentity.getAttribute("identityId");
+      var showInMenuInput =  domIdentity.children.item(0);
+      var showInMenu = showInMenuInput.checked;
+
+      var identityLabelDiv = domIdentity.children.item(1);
+      var identityId = identityLabelDiv.getAttribute("identityId");
 
       extendedProperties[identityId] = {
-        'showInMenu': true,
+        'showInMenu': showInMenu,
         'positionInMenu': positionInMenu++
       }
     }

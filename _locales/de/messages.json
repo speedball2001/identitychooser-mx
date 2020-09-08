@@ -27,6 +27,6 @@
     "message": "Sortierung"
   },
   "options_sortOrder.hint": {
-    "message": "Die Reihenfolge der Absender kann hier mittels Drag and Drop geändert werden:"
+    "message": "Die Reihenfolge der Absender kann hier mittels Drag and Drop geändert werden. Der Absender wird beim Verfassen/Antworten/Weiterleiten ausgeblendet, wenn das Häkchen hier entfernt wird:"
   }
 }

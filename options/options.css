@@ -4,4 +4,5 @@
 
 .list-group-item {
     cursor: move;
+    display: flex;
 }

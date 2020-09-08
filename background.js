@@ -20,41 +20,43 @@ class IdentityChooser {
 
     for (const identity of identities) {
       console.debug(`IdentityChooser#run: found ${identity.accountId}, ${identity.id}`);
-      var icIdentity = {
-        "id": identity.id,
-        "label": identity.label
-      }
+      if(identity.showInMenu) {
+        var icIdentity = {
+          "id": identity.id,
+          "label": identity.label
+        }
 
-      var isEnabledComposeMessage =
-          await this.icOptions.isEnabledComposeMessage();
-      if(isEnabledComposeMessage) {
-        console.debug('IdentityChooser#run: add identity ',
-                      icIdentity,
-                      'to compose');
-        browser.icApi.addIdentity(icIdentity, "compose");
-      }
+        var isEnabledComposeMessage =
+            await this.icOptions.isEnabledComposeMessage();
+        if(isEnabledComposeMessage) {
+          console.debug('IdentityChooser#run: add identity ',
+                        icIdentity,
+                        'to compose');
+          browser.icApi.addIdentity(icIdentity, "compose");
+        }
 
-      var isEnabledReplyMessage =
-          await this.icOptions.isEnabledReplyMessage();
-      if(isEnabledReplyMessage) {
-        console.debug('IdentityChooser#run: add identity ',
-                      icIdentity,
-                      'to reply');
-        browser.icApi.addIdentity(icIdentity, "reply");
+        var isEnabledReplyMessage =
+            await this.icOptions.isEnabledReplyMessage();
+        if(isEnabledReplyMessage) {
+          console.debug('IdentityChooser#run: add identity ',
+                        icIdentity,
+                        'to reply');
+          browser.icApi.addIdentity(icIdentity, "reply");
 
-        console.debug('IdentityChooser#run: add identity ',
-                      icIdentity,
-                      'to replyAll');
-        browser.icApi.addIdentity(icIdentity, "replyAll");
-      }
+          console.debug('IdentityChooser#run: add identity ',
+                        icIdentity,
+                        'to replyAll');
+          browser.icApi.addIdentity(icIdentity, "replyAll");
+        }
 
-      var isEnabledForwardMessage =
-          await this.icOptions.isEnabledForwardMessage();
-      if(isEnabledForwardMessage) {
-        console.debug('IdentityChooser#run: add identity ',
-                      icIdentity,
-                      'to forward');
-        browser.icApi.addIdentity(icIdentity, "forward");
+        var isEnabledForwardMessage =
+            await this.icOptions.isEnabledForwardMessage();
+        if(isEnabledForwardMessage) {
+          console.debug('IdentityChooser#run: add identity ',
+                        icIdentity,
+                        'to forward');
+          browser.icApi.addIdentity(icIdentity, "forward");
+        }
       }
     }
 
