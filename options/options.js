@@ -28,6 +28,15 @@ class OptionsUI {
       el.textContent = i18nMessage;
     }
 
+    for (let el of document.querySelectorAll("[data-html-l10n-id]")) {
+      let id = el.getAttribute("data-html-l10n-id");
+      let i18nMessage = browser.i18n.getMessage(id);
+      if(i18nMessage == "") {
+        i18nMessage = id;
+      }
+      el.insertAdjacentHTML('afterbegin', i18nMessage);
+    }
+
     console.debug("OptionsUI#localizePage -- end");
   }
 

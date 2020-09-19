@@ -28,5 +28,11 @@
   },
   "options_sortOrder.hint": {
     "message": "Die Reihenfolge der Absender kann hier mittels Drag and Drop geändert werden. Der Absender wird beim Verfassen/Antworten/Weiterleiten ausgeblendet, wenn das Häkchen hier entfernt wird:"
+  },
+  "options_icWarnColorsTitle": {
+    "message": "Warnfarben"
+  },
+  "options_icWarnColorsHint": {
+    "message": "<p>Frühere Version von Identity Chooser boten die Möglichkeit, den Hintergrund des Emaileditors beim Verfassen für verschiedene Absender unterschiedlich einzufärben.</p><p>Bis auf weiteres ist diese Funktion nicht mehr verfügbar.</p><p>Ich empfehle stattdessen das Addon <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1], das eine ähnliche Funktionalität bereitstellt. </p><p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
   }
 }

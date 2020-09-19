@@ -28,5 +28,12 @@
   },
   "options_sortOrder.hint": {
     "message": "Resort the identities here using drag and drop. You can hide an identity from the compose/reply/forward buttons by unchecking it:"
+  },
+  "options_icWarnColorsTitle": {
+    "message": "Warnings Colors"
+  },
+  "options_icWarnColorsHint": {
+    "message": "<p>Earlier versions of Identity Chooser offered the possibility to color the background of the email editor differently for different senders when composing.</p><p>This functionality is no longer available until further notice.</p><p>Instead, I recommend the addon <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1], which provides a similar functionality.<p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
   }
+
 }
