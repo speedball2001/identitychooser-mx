@@ -28,6 +28,15 @@ class OptionsUI {
       el.textContent = i18nMessage;
     }
 
+    for (let el of document.querySelectorAll("[data-html-l10n-id]")) {
+      let id = el.getAttribute("data-html-l10n-id");
+      let i18nMessage = browser.i18n.getMessage(id);
+      if(i18nMessage == "") {
+        i18nMessage = id;
+      }
+      el.insertAdjacentHTML('afterbegin', i18nMessage);
+    }
+
     console.debug("OptionsUI#localizePage -- end");
   }
 
@@ -44,9 +53,7 @@ class OptionsUI {
       if (optionName in this.optionsBackend.defaultOptions) {
         var optionElement = document.getElementById(optionName);
 
-        if(optionElement.tagName == "INPUT" &&
-           optionElement.type == "checkbox") {
-
+        if(optionElement.classList.contains("icGeneralOption")) {
           optionElement.checked = optionValue;
         }
       }
@@ -60,10 +67,26 @@ class OptionsUI {
 
     for(const identity of identities) {
       console.debug("OptionsUI#updateUI: add identity ", identity.label);
+
+      // Create drag'n'drop row for an identity
       var identityDiv = document.createElement("div");
       identityDiv.classList.add("list-group-item");
-      identityDiv.appendChild(document.createTextNode(identity.label));
-      identityDiv.setAttribute("identityId", identity.id);
+
+      // Create show in menu checkbox and add it to the row
+      var showInMenuInput = document.createElement("input");
+      showInMenuInput.setAttribute("type", "checkbox");
+      showInMenuInput.checked = identity.showInMenu;
+      showInMenuInput.addEventListener("change", (e) => this.identitiesChanged(e));
+      identityDiv.appendChild(showInMenuInput);
+
+      // Create identity label and add it to the row
+      var identityLabelDiv = document.createElement("div");
+      identityLabelDiv.appendChild(document.createTextNode(identity.label));
+      identityLabelDiv.setAttribute("identityId", identity.id);
+
+      identityDiv.appendChild(identityLabelDiv);
+
+      // Add row to identity list
       domIcIdentitySortList.appendChild(identityDiv);
       console.debug("OptionsUI#updateUI: added identity ", identity.label);
     }
@@ -71,26 +94,10 @@ class OptionsUI {
     new Sortable(domIcIdentitySortList, {
       animation: 150,
       ghostClass: 'blue-background-class',
-      onSort: (e) => this.identitiesSorted(e)
+      onSort: (e) => this.identitiesChanged(e)
     });
 
     console.debug("OptionsUI#updateUI -- end");
-  }
-
-  toIcIdentity(mailIdentity) {
-    let name = mailIdentity.name;
-    let email = mailIdentity.email;
-
-    let label;
-    if(name != '') {
-      label = `${name} <${email}>`;
-    } else {
-      label = email;
-    }
-    return {
-      "label": label,
-      id: mailIdentity.id
-    }
   }
 
   async setupListeners() {
@@ -113,8 +120,8 @@ class OptionsUI {
     }
   }
 
-  async identitiesSorted(e) {
-    console.debug("OptionsUI#identitiesSorted -- begin");
+  async identitiesChanged(e) {
+    console.debug("OptionsUI#identitiesChanged -- begin");
 
     var domIcIdentitySortList =
         document.getElementById("icIdentitySortList");
@@ -122,19 +129,23 @@ class OptionsUI {
     var positionInMenu = 0;
     var extendedProperties = {};
     for(const domIdentity of domIcIdentitySortList.children) {
-      var identityId = domIdentity.getAttribute("identityId");
+      var showInMenuInput =  domIdentity.children.item(0);
+      var showInMenu = showInMenuInput.checked;
+
+      var identityLabelDiv = domIdentity.children.item(1);
+      var identityId = identityLabelDiv.getAttribute("identityId");
 
       extendedProperties[identityId] = {
-        'showInMenu': true,
+        'showInMenu': showInMenu,
         'positionInMenu': positionInMenu++
       }
     }
 
-    console.debug("OptionsUI#identitiesSorted -- new sort order: ",
+    console.debug("OptionsUI#identitiesChanged -- new sort order: ",
                  extendedProperties);
     await this.optionsBackend.storeIdentitiesExtendedProps(extendedProperties);
 
-    console.debug("OptionsUI#identitiesSorted -- end");
+    console.debug("OptionsUI#identitiesChanged -- end");
   }
 }
 
