@@ -1,5 +1,5 @@
 /* eslint-disable object-shorthand */
-/* taken and slightly modified from https://github.com/dreadnaut/bordercolors-d/blob/mailextension/api/LegacyPrefs/implementation.js */
+/* taken and slightly modified from https://github.com/thundernest/addon-developer-support/tree/master/auxiliary-apis/LegacyPrefs */
 
 var { ExtensionCommon } = ChromeUtils.import("resource://gre/modules/ExtensionCommon.jsm");
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
