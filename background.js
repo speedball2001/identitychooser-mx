@@ -73,10 +73,10 @@ class IdentityChooser {
 
   async initUI(window) {
     console.debug("IdentityChooser#initUI -- begin");
-    console.debug(`IdentityChooser#initUI: ${window.type}`);
+    console.debug(`IdentityChooser#initUI: window: ${window.type}`);
 
-    if(window.type == "normal") {
-
+    if(window.type == "normal" ||
+       window.type == "messageDisplay") {
       var isEnabledComposeMessage =
           await this.icOptions.isEnabledComposeMessage();
       if(isEnabledComposeMessage) {
