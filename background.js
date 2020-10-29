@@ -210,5 +210,27 @@ class IdentityChooser {
 }
 
 
-var identityChooser = new IdentityChooser();
-identityChooser.run();
+async function waitForLoad() {
+  let onCreate = new Promise(function(resolve, reject) {
+    function listener() {
+      browser.windows.onCreated.removeListener(listener);
+      resolve(true);
+    }
+    browser.windows.onCreated.addListener(listener);
+  });
+
+  let windows = await browser.windows.getAll({windowTypes:["normal"]});
+  if (windows.length > 0) {
+    return false;
+  } else {
+    return onCreate;
+  }
+}
+
+// self-executing async "main" function
+(async () => {
+  await waitForLoad();
+
+  var identityChooser = new IdentityChooser();
+  waitForLoad().then((isAppStartup) => identityChooser.run());
+})()
