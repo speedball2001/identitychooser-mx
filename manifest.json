@@ -12,7 +12,7 @@
     }
   },
   "permissions": [
-    "accountsRead", "compose", "activeTab", "tabs", "messagesRead", "storage"
+    "accountsRead", "compose", "messagesRead", "storage"
   ],
   "background": {
     "page": "background.html"

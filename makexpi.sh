@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -f identitychooser.xpi
-zip -r identitychooser.xpi *
+zip --exclude makexpi.sh -r identitychooser.xpi *

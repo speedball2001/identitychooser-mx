@@ -61,6 +61,18 @@ class IcButton {
     console.debug("IcButton#attachToWindow - end");
   }
 
+  detachFromWindow() {
+    console.debug(`IcButton#detachFromWindow: find button: ${this.buttonId}`);
+
+    if(this.domButton) {
+      this.domButton.removeAttribute("type");
+      this.domButton.setAttribute("wantdropmarker", "false");
+      this.domButton.setAttribute("oncommand", this.orgOnCommandValue);
+      this.domButton.removeChild(this.identityPopup);
+      this.domButton.removeChild(this.domButton.querySelector('.toolbarbutton-menu-dropmarker'));
+    }
+  }
+
   findButton(window, buttonId) {
     return window.document.getElementById(buttonId);
   }
@@ -71,6 +83,7 @@ class IcButton {
     //
     // Remove default command handler
     console.debug("IcButton#setupButton: remove old oncommand handler");
+    this.orgOnCommandValue = btn.getAttribute("oncommand");
     btn.removeAttribute("oncommand");
 
     //
@@ -205,14 +218,24 @@ class SmartReplyButton extends IcButton {
     super(action, buttonId, popupId);
   }
 
+  detachFromWindow() {
+    console.debug(`SmartReplyButton#detachFromWindow: find button: ${this.buttonId}`);
+
+    if(this.domButton) {
+      var smartReplyBtn = this.window.document.getElementById("hdrSmartReplyButton");
+      smartReplyBtn.replaceChild(this.orgReplyBtn,
+                                 this.window.document.getElementById(this.buttonId));
+    }
+  }
+
   findButton(window, buttonId) {
     console.debug("SmartReplyButton#findButton -- start");
     console.debug(`SmartReplyButton#findButton: buttonId: ${buttonId}`);
 
     var smartReplyBtn = window.document.getElementById("hdrSmartReplyButton");
-    var orgReplyBtn = window.document.getElementById(buttonId);
-    var label = orgReplyBtn.getAttribute("label");
-    var tooltipText = orgReplyBtn.getAttribute("tooltiptext");
+    this.orgReplyBtn = window.document.getElementById(buttonId);
+    var label = this.orgReplyBtn.getAttribute("label");
+    var tooltipText = this.orgReplyBtn.getAttribute("tooltiptext");
 
     var newReplyBtn = window.MozXULElement.parseXULToFragment(
       `<toolbarbutton id="${buttonId}"
@@ -221,7 +244,7 @@ class SmartReplyButton extends IcButton {
                       tooltiptext="${tooltipText}"
                       class="toolbarbutton-1 msgHeaderView-button hdrReplyButton hdrReplyAllButton"/>`);
 
-    smartReplyBtn.replaceChild(newReplyBtn, orgReplyBtn);
+    smartReplyBtn.replaceChild(newReplyBtn, this.orgReplyBtn);
 
     console.debug("SmartReplyButton#findButton -- end");
     return window.document.getElementById(buttonId);
@@ -256,6 +279,43 @@ var replyAllButton = new SmartReplyButton("replyAll",
                                           "hdrReplyAllDropdown");
 var forwardButton = new IcButton("forward", "hdrForwardButton");
 var icApi = class extends ExtensionCommon.ExtensionAPI {
+  onStartup() {
+    console.debug('icApi#onStartup');
+  }
+  onShutdown(isAppShutdown) {
+    console.debug('icApi#onShutdown');
+    if (isAppShutdown) {
+      return; // the application gets unloaded anyway
+    }
+
+    console.debug('icApi#onShutdown: composeButton detachFromWindow');
+    composeButton.detachFromWindow();
+
+    console.debug('icApi#onShutdown: replyButton detachFromWindow');
+    replyButton.detachFromWindow();
+
+    console.debug('icApi#onShutdown: replyToSenderButton detachFromWindow');
+    replyToSenderButton.detachFromWindow();
+
+    console.debug('icApi#onShutdown: replyAllButton detachFromWindow');
+    replyAllButton.detachFromWindow();
+
+    console.debug('icApi#onShutdown: forwardButton detachFromWindow');
+    forwardButton.detachFromWindow();
+
+    // Unload JSMs of this add-on
+    const Cu = Components.utils;
+    const rootURI = this.extension.rootURI.spec;
+    for (let module of Cu.loadedModules) {
+      if (module.startsWith(rootURI)) {
+        Cu.unload(module);
+      }
+    }
+    // Clear caches that could prevent upgrades from working properly
+    const { Services } = ChromeUtils.import(
+      "resource://gre/modules/Services.jsm");
+    Services.obs.notifyObservers(null, "startupcache-invalidate", null);
+  }
   getAPI(context) {
     return {
       icApi: {
