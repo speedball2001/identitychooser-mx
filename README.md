@@ -27,3 +27,11 @@ version.  Development releases might be available earlier in the
 
   [ic-mx]: https://addons.thunderbird.net/addon/identity-chooser/
   [releases]: https://github.com/speedball2001/identitychooser-mx/releases
+
+
+## Attribution
+
+This addon uses code from other projects:
+
+  * [sortable.js]: https://github.com/SortableJS/sortablejs
+  * [legacyprefs]: https://github.com/thundernest/addon-developer-support/tree/master/auxiliary-apis/LegacyPrefs
