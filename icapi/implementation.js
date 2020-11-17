@@ -317,6 +317,16 @@ class IcButton2 {
     console.debug("IcButton2#attachToWindow - end");
   }
 
+  detachFromWindow() {
+    console.debug(`IcButton2#detachFromWindow: find button: ${this.buttonId}`);
+
+    for (let identity of this.identities) {
+      HTB.hackToolbarbutton.removeMenuitem(this.window,
+                                           this.buttonId,
+                                           "identitychooser-" + this.buttonId + "-" +identity.id);
+    }
+  }
+
   addIdentity(identity) {
     console.debug("IcButton2#addIdentity -- begin");
     console.debug("IcButton2#addIdentity: identity:", identity);
@@ -432,6 +442,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
 
     console.debug('icApi#onShutdown: composeButton detachFromWindow');
     composeButton.detachFromWindow();
+    mainToolbarReplyButton.detachFromWindow();
 
     console.debug('icApi#onShutdown: replyButton detachFromWindow');
     replyButton.detachFromWindow();
