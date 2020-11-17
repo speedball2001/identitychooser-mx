@@ -409,7 +409,6 @@ class IcButton2 {
 
 
 var icEventEmitter = new EventEmitter();
-var composeButton = new IcButton("compose", "button-newmsg");
 var replyButton = new IcButton("reply", "hdrReplyButton");
 var replyToSenderButton = new IcButton("reply", "hdrReplyToSenderButton");
 var replyAllButton = new SmartReplyButton("replyAll",
@@ -418,6 +417,7 @@ var replyAllButton = new SmartReplyButton("replyAll",
 var forwardButton = new IcButton("forward", "hdrForwardButton");
 
 // main toolbar buttons
+var composeButton = new IcButton2("compose", "button-newmsg");
 var mainToolbarReplyButton = new IcButton2("reply", "button-reply");
 
 var icApi = class extends ExtensionCommon.ExtensionAPI {
