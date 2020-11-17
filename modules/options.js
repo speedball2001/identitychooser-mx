@@ -1,5 +1,12 @@
 export class Options {
   constructor() {
+    this.defaultOptionKeys = [
+      'icEnableComposeMessage',
+      'icEnableReplyMessage',
+      'icEnableForwardMessage',
+      'identitiesExtendedProps'
+    ];
+
     this.defaultOptions = {
       icEnableComposeMessage: true,
       icEnableReplyMessage: true,
@@ -16,8 +23,8 @@ export class Options {
   async setupDefaultOptions() {
     console.debug("Option#setupDefaultOptions -- begin");
 
-    var icOptions = await browser.storage.local.get();
-    console.debug('Option#setupDefaultOptions: locally stored option:',  icOptions);
+    var icOptions = await browser.storage.local.get(this.defaultOptionKeys);
+    console.debug('Option#setupDefaultOptions: locally stored options:',  icOptions);
 
     if(Object.entries(icOptions).length == 0) {
       console.debug('Option#setupDefaultOptions: not stored options -> migrate TB68 prefs to local storage');
@@ -51,7 +58,6 @@ export class Options {
         }
       }
     }
-
 
     if(Object.entries(newIdentities).length > 0) {
       console.debug("Options#setupDefaultOptions: found new identities",
@@ -98,12 +104,12 @@ export class Options {
     return this.isEnabledOption("icEnableForwardMessage", true);
   }
 
-  async isEnabledOption(option, defaultValue) {
-    var icOptions = await browser.storage.local.get();
+  async isEnabledOption(optionKey, defaultValue) {
+    var icOptions = await browser.storage.local.get(optionKey);
 
     var ret = defaultValue;
-    if(option in icOptions) {
-      ret = icOptions[option];
+    if(optionKey in icOptions) {
+      ret = icOptions[optionKey];
     }
 
     return ret;
