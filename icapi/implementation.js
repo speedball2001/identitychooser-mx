@@ -2,6 +2,7 @@ var { ExtensionCommon } = ChromeUtils.import("resource://gre/modules/ExtensionCo
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 var { EventEmitter } = ChromeUtils.import("resource://gre/modules/EventEmitter.jsm");
 
+var HTB = {};
 
 class IcButton {
   constructor(action, buttonId, popupId) {
@@ -317,6 +318,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
     Services.obs.notifyObservers(null, "startupcache-invalidate", null);
   }
   getAPI(context) {
+    Services.scriptloader.loadSubScript(context.extension.getURL("hackToolbarbutton.js"), HTB, "UTF-8");
+
     return {
       icApi: {
         async initComposeMessageAction(windowId) {
