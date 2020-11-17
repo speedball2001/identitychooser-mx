@@ -24,7 +24,7 @@ export class Options {
     console.debug("Option#setupDefaultOptions -- begin");
 
     var icOptions = await browser.storage.local.get(this.defaultOptionKeys);
-    console.debug('Option#setupDefaultOptions: locally stored option:',  icOptions);
+    console.debug('Option#setupDefaultOptions: locally stored options:',  icOptions);
 
     if(Object.entries(icOptions).length == 0) {
       console.debug('Option#setupDefaultOptions: not stored options -> migrate TB68 prefs to local storage');
