@@ -271,6 +271,143 @@ class SmartReplyButton extends IcButton {
   }
 }
 
+class IcButton2 {
+  constructor(action, buttonId) {
+    console.debug('IcButton2#constructor -- begin');
+    console.debug(`IcButton2#constructor: ${action}, ${buttonId}`);
+
+    this.action = action;
+    this.buttonId = buttonId;
+
+    this.identities = [];
+    this.isAttached = false;
+
+    console.debug('IcButton2#constructor -- end');
+  }
+
+  attachToWindow(window) {
+    console.debug("IcButton2#attachToWindow -- begin");
+
+    this.window = window;
+
+    console.debug(`IcButton2#attachToWindow: find button: ${this.buttonId}`);
+
+    var menu = HTB.hackToolbarbutton.getMenupopupElement(this.window,
+                                                         this.buttonId);
+
+    HTB.hackToolbarbutton.allowDefaultAction(this.window,
+                                             this.buttonId,
+                                             false);
+
+    menu.removeAttribute("oncommand");
+
+    menu.addEventListener("popupshowing",
+                          () => this.onPopupShowing(),
+                          false);
+
+    menu.addEventListener("command",
+                          (event) => this.identityClicked(event),
+                          true);
+
+
+    this.isAttached = true;
+
+    this.onPopupShowing();
+
+    console.debug("IcButton2#attachToWindow - end");
+  }
+
+  addIdentity(identity) {
+    console.debug("IcButton2#addIdentity -- begin");
+    console.debug("IcButton2#addIdentity: identity:", identity);
+
+    this.identities.push(identity);
+
+    console.debug("IcButton2#addIdentity -- end");
+  }
+
+  onPopupShowing() {
+    console.debug("IcButton2#onPopupShowing -- begin");
+
+    if(this.isAttached) {
+      console.debug("IcButton2#onPopupShowing: clear popup");
+      this.clearIdentityPopup();
+
+      for (let identity of this.identities) {
+        HTB.hackToolbarbutton.addMenuitem(this.window,
+                                          this.buttonId,
+                                          "identitychooser-" + this.buttonId + "-" +identity.id,
+                                          {
+                                            label: identity.label,
+                                            value: "identitychooser-" + identity.id
+                                          });
+
+        console.debug("IcButton2#onPopupShowing: add identity to menu: ", identity);
+      }
+
+      HTB.hackToolbarbutton.allowDefaultAction(this.window,
+                                               this.buttonId,
+                                               false);
+    }
+
+    console.debug("IcButton2#onPopupShowing -- end");
+  }
+
+  clearIdentityPopup() {
+    var menu = HTB.hackToolbarbutton.getMenupopupElement(this.window,
+                                                         this.buttonId);
+
+    for(let i = menu.childNodes.length - 1; i >= 0; i--) {
+      let child = menu.childNodes.item(i)
+
+      // Remove menuitems created by identitychooser (child.value
+      //   starts with "identitychooser-" or
+      if((child.hasAttribute("value") &&
+          child.getAttribute("value").indexOf("identitychooser-") > -1)) {
+        menu.removeChild(child);
+      }
+    }
+  }
+
+  identityClicked(event) {
+    console.debug("IcButton2#identityClicked -- begin");
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    let src = event.target;
+    let info = [];
+
+    if(event.shiftKey) {
+      info.push("Shift");
+    }
+
+    if(event.ctrlKey) {
+      info.push("Ctrl");
+    }
+
+    if(event.altKey) {
+      info.push("Alt");
+    }
+
+    if(event.metaKey) {
+      info.push("Command");
+    }
+
+    // value="identitychooser-id1"
+    var identityId = src.value.split("-")[1];
+    icEventEmitter.emit("identity-action-event",
+                        identityId,
+                        this.action,
+                        info);
+
+    console.debug("IcButton2#identityClicked -- end");
+
+    return false;
+  }
+}
+
+
 var icEventEmitter = new EventEmitter();
 var composeButton = new IcButton("compose", "button-newmsg");
 var replyButton = new IcButton("reply", "hdrReplyButton");
@@ -279,6 +416,10 @@ var replyAllButton = new SmartReplyButton("replyAll",
                                           "hdrReplyAllButton",
                                           "hdrReplyAllDropdown");
 var forwardButton = new IcButton("forward", "hdrForwardButton");
+
+// main toolbar buttons
+var mainToolbarReplyButton = new IcButton2("reply", "button-reply");
+
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   onStartup() {
     console.debug('icApi#onStartup');
@@ -343,15 +484,15 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           replyToSenderButton.attachToWindow(window);
           replyAllButton.attachToWindow(window);
 
+          mainToolbarReplyButton.attachToWindow(window);
+
           console.debug('icApi#initReplyMessageAction -- end');
         },
         async initForwardMessageAction(windowId) {
           console.debug('icApi#initForwardMessageAction -- begin');
           console.debug(`icApi.initForwardMessageAction: window id: ${windowId}`);
 
-
           let window = context.extension.windowManager.get(windowId, context).window;
-
           forwardButton.attachToWindow(window);
 
           console.debug('icApi#initForwardMessageAction -- end');
@@ -367,6 +508,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           } else if(action == "reply") {
             replyButton.addIdentity(identity);
             replyToSenderButton.addIdentity(identity);
+
+            mainToolbarReplyButton.addIdentity(identity);
           } else if(action == "replyAll") {
             replyAllButton.addIdentity(identity);
           } else if(action == "forward") {
