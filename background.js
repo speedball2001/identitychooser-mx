@@ -113,7 +113,7 @@ class IdentityChooser {
         messageFormat = "text/html";
       } else {
         messageFormat = "text/plain";
-        }
+      }
     }
 
     console.debug('IdentityChooser#identityChosen: messageFormat: ', messageFormat);
