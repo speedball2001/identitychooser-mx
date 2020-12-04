@@ -254,15 +254,18 @@ class SmartReplyButton extends IcButton {
 }
 
 class IcButton2 {
-  constructor(action, buttonId) {
+  constructor(action, buttonId, innerButtonId = null) {
     console.debug('IcButton2#constructor -- begin');
     console.debug(`IcButton2#constructor: ${action}, ${buttonId}`);
 
     this.action = action;
     this.buttonId = buttonId;
+    this.innerButtonId = innerButtonId;
 
     this.identities = [];
     this.isAttached = false;
+
+    this.eventListeners = [];
 
     console.debug('IcButton2#constructor -- end');
   }
@@ -279,18 +282,20 @@ class IcButton2 {
 
     HTB.hackToolbarbutton.allowDefaultAction(this.window,
                                              this.buttonId,
-                                             false);
+                                             false,
+                                             this.innerButtonId);
 
     menu.removeAttribute("oncommand");
 
+    this.eventListeners["popupshowing"] = () => this.onPopupShowing();
     menu.addEventListener("popupshowing",
-                          () => this.onPopupShowing(),
+                          this.eventListeners["popupshowing"],
                           false);
 
+    this.eventListeners["command"] = (event) => this.identityClicked(event);
     menu.addEventListener("command",
-                          (event) => this.identityClicked(event),
+                          this.eventListeners["command"],
                           true);
-
 
     this.isAttached = true;
 
@@ -301,6 +306,16 @@ class IcButton2 {
 
   detachFromWindow() {
     console.debug(`IcButton2#detachFromWindow: find button: ${this.buttonId}`);
+
+    var menu = HTB.hackToolbarbutton.getMenupopupElement(this.window,
+                                                         this.buttonId);
+
+    menu.removeEventListener("popupshowing",
+                             this.eventListeners["popupshowing"],
+                             false);
+    menu.removeEventListener("command",
+                             this.eventListeners["command"],
+                             true);
 
     for (let identity of this.identities) {
       HTB.hackToolbarbutton.removeMenuitem(this.window,
@@ -417,6 +432,47 @@ class IcButton2 {
   }
 }
 
+class MainToolbarForwardButton extends IcButton2 {
+  constructor(action, buttonId) {
+    super(action, buttonId);
+  }
+
+  attachToWindow(window) {
+    console.debug("MainToolbarForwardButton#attachToWindow -- begin");
+
+    super.attachToWindow(window);
+
+    HTB.hackToolbarbutton.allowDefaultAction2(this.window,
+                                              this.buttonId,
+                                              false);
+
+    HTB.hackToolbarbutton.hideMenuitem(this.window,
+                                       this.buttonId,
+                                       "button-ForwardAsInlineMenu");
+
+    HTB.hackToolbarbutton.hideMenuitem(this.window,
+                                       this.buttonId,
+                                       "button-ForwardAsAttachmentMenu");
+  }
+
+  detachFromWindow() {
+    console.debug("MainToolbarForwardButton#detachToWindow -- begin");
+
+    super.detachFromWindow();
+
+    HTB.hackToolbarbutton.allowDefaultAction2(this.window,
+                                              this.buttonId,
+                                              true);
+
+    HTB.hackToolbarbutton.unhideMenuitem(this.window,
+                                         this.buttonId,
+                                         "button-ForwardAsInlineMenu");
+
+    HTB.hackToolbarbutton.unhideMenuitem(this.window,
+                                         this.buttonId,
+                                         "button-ForwardAsAttachmentMenu");
+  }
+}
 
 var icEventEmitter = new EventEmitter();
 var replyButton = new IcButton("reply", "hdrReplyButton");
@@ -430,6 +486,8 @@ var forwardButton = new IcButton("forward", "hdrForwardButton");
 var composeButton = new IcButton2("compose", "button-newmsg");
 var mainToolbarReplyButton = new IcButton2("reply", "button-reply");
 var mainToolbarReplyAllButton = new IcButton2("replyAll", "button-replyall");
+var mainToolbarForwardButton = new MainToolbarForwardButton("forward",
+                                                            "button-forward");
 
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   onStartup() {
@@ -445,6 +503,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
     composeButton.detachFromWindow();
     mainToolbarReplyButton.detachFromWindow();
     mainToolbarReplyAllButton.detachFromWindow();
+    mainToolbarForwardButton.detachFromWindow();
 
     console.debug('icApi#onShutdown: replyButton detachFromWindow');
     replyButton.detachFromWindow();
@@ -473,6 +532,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
   }
   getAPI(context) {
     Services.scriptloader.loadSubScript(context.extension.getURL("hackToolbarbutton.js"), HTB, "UTF-8");
+
+    console.log("HTB", HTB);
 
     return {
       icApi: {
@@ -508,6 +569,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           let window = context.extension.windowManager.get(windowId, context).window;
           forwardButton.attachToWindow(window);
 
+          mainToolbarForwardButton.attachToWindow(window);
           console.debug('icApi#initForwardMessageAction -- end');
         },
 
@@ -529,6 +591,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
             mainToolbarReplyAllButton.addIdentity(identity);
           } else if(action == "forward") {
             forwardButton.addIdentity(identity);
+
+            mainToolbarForwardButton.addIdentity(identity);
           }
 
           console.debug('icApi#addIdentity -- end');
