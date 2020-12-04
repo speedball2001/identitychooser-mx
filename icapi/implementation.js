@@ -194,24 +194,6 @@ class IcButton {
 
     return false;
   }
-
-  keyPressed(event) {
-    if(event.ctrlKey && (event.key == this.openPopupKey.toLowerCase() ||
-                         event.key == this.openPopupKey.toUpperCase())) {
-      this.window.document.getElementById(this.buttonId).open = true;
-    }
-  }
-
-  attachKeyToPopup(window, keyId) {
-    var keyElement = window.document.getElementById(keyId);
-
-    if(keyElement) {
-      keyElement.removeAttribute("command");
-      this.openPopupKey = keyElement.getAttribute("key");
-
-      window.addEventListener('keyup', (event) => this.keyPressed(event));
-    }
-  }
 }
 
 class SmartReplyButton extends IcButton {
@@ -324,6 +306,24 @@ class IcButton2 {
       HTB.hackToolbarbutton.removeMenuitem(this.window,
                                            this.buttonId,
                                            "identitychooser-" + this.buttonId + "-" +identity.id);
+    }
+  }
+
+  attachKeyToPopup(window, keyId) {
+    var keyElement = window.document.getElementById(keyId);
+
+    if(keyElement) {
+      keyElement.removeAttribute("command");
+      this.openPopupKey = keyElement.getAttribute("key");
+
+      window.addEventListener('keyup', (event) => this.keyPressed(event));
+    }
+  }
+
+  keyPressed(event) {
+    if(event.ctrlKey && (event.key == this.openPopupKey.toLowerCase() ||
+                         event.key == this.openPopupKey.toUpperCase())) {
+      this.window.document.getElementById(this.buttonId).open = true;
     }
   }
 
