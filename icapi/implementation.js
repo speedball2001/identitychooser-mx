@@ -429,6 +429,7 @@ var forwardButton = new IcButton("forward", "hdrForwardButton");
 // main toolbar buttons
 var composeButton = new IcButton2("compose", "button-newmsg");
 var mainToolbarReplyButton = new IcButton2("reply", "button-reply");
+var mainToolbarReplyAllButton = new IcButton2("replyAll", "button-replyall");
 
 var icApi = class extends ExtensionCommon.ExtensionAPI {
   onStartup() {
@@ -443,6 +444,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
     console.debug('icApi#onShutdown: composeButton detachFromWindow');
     composeButton.detachFromWindow();
     mainToolbarReplyButton.detachFromWindow();
+    mainToolbarReplyAllButton.detachFromWindow();
 
     console.debug('icApi#onShutdown: replyButton detachFromWindow');
     replyButton.detachFromWindow();
@@ -496,7 +498,7 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           replyAllButton.attachToWindow(window);
 
           mainToolbarReplyButton.attachToWindow(window);
-
+          mainToolbarReplyAllButton.attachToWindow(window);
           console.debug('icApi#initReplyMessageAction -- end');
         },
         async initForwardMessageAction(windowId) {
@@ -523,6 +525,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
             mainToolbarReplyButton.addIdentity(identity);
           } else if(action == "replyAll") {
             replyAllButton.addIdentity(identity);
+
+            mainToolbarReplyAllButton.addIdentity(identity);
           } else if(action == "forward") {
             forwardButton.addIdentity(identity);
           }
