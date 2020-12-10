@@ -474,13 +474,63 @@ class MainToolbarForwardButton extends IcButton2 {
   }
 }
 
+class ReplyAllButton extends IcButton2 {
+  constructor(action, buttonId) {
+    super(action, buttonId);
+  }
+
+  attachToWindow(window) {
+    console.debug("ReplyAllButton#attachToWindow -- begin");
+
+    super.attachToWindow(window);
+
+    HTB.hackToolbarbutton.allowDefaultAction2(this.window,
+                                              this.buttonId,
+                                              false);
+
+    HTB.hackToolbarbutton.hideMenuitem(this.window,
+                                       this.buttonId,
+                                       "hdrReplyAll_ReplyAllSubButton");
+
+    HTB.hackToolbarbutton.hideMenuitem(this.window,
+                                       this.buttonId,
+                                       "hdrReplyAllSubSeparator");
+
+    HTB.hackToolbarbutton.hideMenuitem(this.window,
+                                       this.buttonId,
+                                       "hdrReplySubButton");
+  }
+
+  detachFromWindow() {
+    console.debug("ReplyAllButton#detachToWindow -- begin");
+
+    super.detachFromWindow();
+
+    HTB.hackToolbarbutton.allowDefaultAction2(this.window,
+                                              this.buttonId,
+                                              true);
+
+    HTB.hackToolbarbutton.unhideMenuitem(this.window,
+                                         this.buttonId,
+                                         "hdrReplyAll_ReplyAllSubButton");
+
+    HTB.hackToolbarbutton.unhideMenuitem(this.window,
+                                         this.buttonId,
+                                         "hdrReplyAllSubSeparator");
+
+    HTB.hackToolbarbutton.unhideMenuitem(this.window,
+                                         this.buttonId,
+                                       "hdrReplySubButton");
+  }
+}
+
 var icEventEmitter = new EventEmitter();
-var replyButton = new IcButton("reply", "hdrReplyButton");
-var replyToSenderButton = new IcButton("reply", "hdrReplyToSenderButton");
-var replyAllButton = new SmartReplyButton("replyAll",
-                                          "hdrReplyAllButton",
-                                          "hdrReplyAllDropdown");
-var forwardButton = new IcButton("forward", "hdrForwardButton");
+var replyButton = new IcButton2("reply", "hdrReplyButton");
+var replyToSenderButton = new IcButton2("reply", "hdrReplyToSenderButton");
+var replyAllButton = new ReplyAllButton("replyAll",
+                                         "hdrReplyAllButton",
+                                         "hdrReplyAllDropdown");
+var forwardButton = new IcButton2("forward", "hdrForwardButton");
 
 // main toolbar buttons
 var composeButton = new IcButton2("compose", "button-newmsg");
