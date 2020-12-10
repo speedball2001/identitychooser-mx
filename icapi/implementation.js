@@ -36,21 +36,23 @@ class IcButton2 {
                                              false,
                                              this.innerButtonId);
 
-    menu.removeAttribute("oncommand");
+    if(menu) {
+      menu.removeAttribute("oncommand");
 
-    this.eventListeners["popupshowing"] = () => this.onPopupShowing();
-    menu.addEventListener("popupshowing",
-                          this.eventListeners["popupshowing"],
-                          false);
+      this.eventListeners["popupshowing"] = () => this.onPopupShowing();
+      menu.addEventListener("popupshowing",
+                            this.eventListeners["popupshowing"],
+                            false);
 
-    this.eventListeners["command"] = (event) => this.identityClicked(event);
-    menu.addEventListener("command",
-                          this.eventListeners["command"],
-                          true);
+      this.eventListeners["command"] = (event) => this.identityClicked(event);
+      menu.addEventListener("command",
+                            this.eventListeners["command"],
+                            true);
 
-    this.isAttached = true;
+      this.isAttached = true;
 
-    this.onPopupShowing();
+      this.onPopupShowing();
+    }
 
     console.debug("IcButton2#attachToWindow - end");
   }
@@ -61,12 +63,14 @@ class IcButton2 {
     var menu = HTB.hackToolbarbutton.getMenupopupElement(this.window,
                                                          this.buttonId);
 
-    menu.removeEventListener("popupshowing",
-                             this.eventListeners["popupshowing"],
-                             false);
-    menu.removeEventListener("command",
-                             this.eventListeners["command"],
-                             true);
+    if(menu) {
+      menu.removeEventListener("popupshowing",
+                               this.eventListeners["popupshowing"],
+                               false);
+      menu.removeEventListener("command",
+                               this.eventListeners["command"],
+                               true);
+    }
 
     for (let identity of this.identities) {
       HTB.hackToolbarbutton.removeMenuitem(this.window,
