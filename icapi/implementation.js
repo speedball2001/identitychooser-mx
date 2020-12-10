@@ -15,7 +15,8 @@ class IcButton2 {
 
     this.identities = [];
     this.isAttached = false;
-
+    this.keyCommand = null;
+    this.keyOnCommand = null;
     this.eventListeners = [];
 
     console.debug('IcButton2#constructor -- end');
@@ -83,16 +84,36 @@ class IcButton2 {
     var keyElement = window.document.getElementById(keyId);
 
     if(keyElement) {
+      this.keyCommand = keyElement.getAttribute("command");
+      this.keyOnCommand = keyElement.getAttribute("oncommand");
       keyElement.removeAttribute("command");
-      this.openPopupKey = keyElement.getAttribute("key");
+      keyElement.removeAttribute("oncommand");
 
-      window.addEventListener('keyup', (event) => this.keyPressed(event));
+
+      var modifiers = keyElement.getAttribute("modifiers");
+      var key = keyElement.getAttribute("key");
+
+      this.openPopupKey =
+        modifiers.includes("shift") ? key.toUpperCase() : key.toLowerCase();
+
+      this.eventListeners["keyup"] = (event) => this.keyPressed(event);
+      window.addEventListener('keyup', this.eventListeners["keyup"]);
+    }
+  }
+
+  detachKeyFromPopup(keyId) {
+    var keyElement = this.window.document.getElementById(keyId);
+
+    if(keyElement) {
+      keyElement.setAttribute("command", this.keyCommand);
+      keyElement.setAttribute("oncommand", this.keyOnCommand);
+
+      this.window.removeEventListener('keyup', this.eventListeners["keyup"]);
     }
   }
 
   keyPressed(event) {
-    if(event.ctrlKey && (event.key == this.openPopupKey.toLowerCase() ||
-                         event.key == this.openPopupKey.toUpperCase())) {
+    if(event.ctrlKey && (event.key == this.openPopupKey)) {
       this.window.document.getElementById(this.buttonId).open = true;
     }
   }
@@ -310,6 +331,11 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
     mainToolbarReplyAllButton.detachFromWindow();
     mainToolbarForwardButton.detachFromWindow();
 
+    composeButton.detachKeyFromPopup("key_newMessage2");
+    mainToolbarReplyButton.detachKeyFromPopup("key_reply");
+    mainToolbarReplyAllButton.detachKeyFromPopup("key_replyall");
+    mainToolbarForwardButton.detachKeyFromPopup("key_forward");
+
     console.debug('icApi#onShutdown: replyButton detachFromWindow');
     replyButton.detachFromWindow();
 
@@ -364,7 +390,11 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           replyAllButton.attachToWindow(window);
 
           mainToolbarReplyButton.attachToWindow(window);
+          mainToolbarReplyButton.attachKeyToPopup(window, "key_reply");
+
           mainToolbarReplyAllButton.attachToWindow(window);
+          mainToolbarReplyAllButton.attachKeyToPopup(window, "key_replyall");
+
           console.debug('icApi#initReplyMessageAction -- end');
         },
         async initForwardMessageAction(windowId) {
@@ -375,6 +405,8 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           forwardButton.attachToWindow(window);
 
           mainToolbarForwardButton.attachToWindow(window);
+          mainToolbarForwardButton.attachKeyToPopup(window, "key_forward");
+
           console.debug('icApi#initForwardMessageAction -- end');
         },
 
