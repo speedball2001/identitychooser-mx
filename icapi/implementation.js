@@ -364,8 +364,6 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
     Services.scriptloader.loadSubScript(context.extension.getURL("hackToolbarbutton.js"), HTB, "UTF-8");
 
-    console.log("HTB", HTB);
-
     return {
       icApi: {
         async initComposeMessageAction(windowId) {
