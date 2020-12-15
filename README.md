@@ -33,5 +33,9 @@ version.  Development releases might be available earlier in the
 
 This addon uses code from other projects:
 
-  * [sortable.js]: https://github.com/SortableJS/sortablejs
-  * [legacyprefs]: https://github.com/thundernest/addon-developer-support/tree/master/auxiliary-apis/LegacyPrefs
+  * \[sortable.js\]: https://github.com/SortableJS/sortablejs
+  
+  * \[legacyprefs\]: https://github.com/thundernest/addon-developer-support/tree/master/auxiliary-apis/LegacyPrefs
+  
+  * \[hackToolbarbutton\]: https://github.com/thundernest/addon-developer-support/tree/master/scripts/hackToolbarbutton
+  
