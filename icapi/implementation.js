@@ -106,10 +106,17 @@ class IcButton2 {
     var keyElement = this.window.document.getElementById(keyId);
 
     if(keyElement) {
-      keyElement.setAttribute("command", this.keyCommand);
-      keyElement.setAttribute("oncommand", this.keyOnCommand);
+      if(this.keyCommand) {
+        keyElement.setAttribute("command", this.keyCommand);
+      }
 
-      this.window.removeEventListener('keyup', this.eventListeners["keyup"]);
+      if(this.keyOnCommand) {
+        keyElement.setAttribute("oncommand", this.keyOnCommand);
+      }
+
+      if(this.eventListeners["keyup"]) {
+        this.window.removeEventListener('keyup', this.eventListeners["keyup"]);
+      }
     }
   }
 
