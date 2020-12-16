@@ -11,10 +11,12 @@ var hackToolbarbutton = {
   // enable/disable the default action of the button
   allowDefaultAction2(window, buttonId, allow = true) {
     let button = window.document.getElementById(buttonId);
-    let innerButton = button.querySelector("toolbarbutton");
+    if(button) {
+      let innerButton = button.querySelector("toolbarbutton");
 
-    if (innerButton) {
-      innerButton.setAttribute("allowevents", allow ? "true" : "false");
+      if (innerButton) {
+        innerButton.setAttribute("allowevents", allow ? "true" : "false");
+      }
     }
   },
 
