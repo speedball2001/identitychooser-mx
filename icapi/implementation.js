@@ -82,8 +82,9 @@ class IcButton2 {
 
   attachKeyToPopup(window, keyId) {
     var keyElement = window.document.getElementById(keyId);
-
-    if(keyElement) {
+    var menu = HTB.hackToolbarbutton.getMenupopupElement(window,
+                                                         this.buttonId);
+    if(keyElement && menu) {
       this.keyCommand = keyElement.getAttribute("command");
       this.keyOnCommand = keyElement.getAttribute("oncommand");
       keyElement.removeAttribute("command");
