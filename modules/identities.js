@@ -32,12 +32,16 @@ export class IcIdentities {
   toIdentityLabel(mailIdentity) {
     let name = mailIdentity.name;
     let email = mailIdentity.email;
+    let idlabel = mailIdentity.label;
 
     let label;
     if(name != '') {
       label = `${name} <${email}>`;
     } else {
       label = email;
+    }
+    if(idlabel != '') {
+      label = label + " (" + idlabel + ")";
     }
 
     return label;
