@@ -107,6 +107,11 @@
             "type": "string"
           },
           {
+             "name": "windowId",
+             "description": "window where the identity was chosen",
+             "type": "integer"
+          },
+          {
             "name": "info",
             "optional": true,
             "description": "Information sent when a identity chooser action is clicked.",
