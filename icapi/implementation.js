@@ -208,6 +208,7 @@ class IcButton2 {
     icEventEmitter.emit("identity-action-event",
                         identityId,
                         this.action,
+                        this.window,
                         info);
 
     console.debug("IcButton2#identityClicked -- end");
@@ -444,8 +445,10 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
           context,
           name: "icApi.onIdentityChosen",
           register(fire) {
-            function callback(event, identityId, action, info) {
-              return fire.async(identityId, action, info);
+            function callback(event, identityId, action, window, info) {
+              var windowId = context.extension.windowManager.getWrapper(window).id;
+
+              return fire.async(identityId, action, windowId, info);
             }
 
             icEventEmitter.on("identity-action-event", callback);
