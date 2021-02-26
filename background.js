@@ -9,7 +9,25 @@ class IdentityChooser {
   async run() {
     console.debug("IdentityChooser#run -- begin");
 
-    await this.icOptions.setupDefaultOptions();
+    try {
+      await this.icOptions.setupDefaultOptions();
+    } catch (error) {
+      //
+      // Workaround. Several users report issues with Cardboox and
+      // Identity Chooser accessing the browser.local store
+      // (https://github.com/speedball2001/identitychooser-mx/issues/18:
+      //
+      //    20:30:33.873 TransactionInactiveError: A request was placed
+      //    against a transaction which is currently not active, or which
+      //    is finished. IndexedDB.jsm:101:46
+      //
+      // Assuming that this error is caused by a timing issue while
+      // accessing the store concurrently, we simply try to circumvent this by
+      // reloading ourselves
+
+      console.debug("Caught exception while reading settings. Reloading extension.", error);
+      browser.runtime.reload();
+    }
 
     browser.icApi.onIdentityChosen.addListener(
         (identityId, action, windowId, info) => this.identityChosen(identityId, action, windowId, info));
