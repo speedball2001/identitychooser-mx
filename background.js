@@ -141,36 +141,33 @@ class IdentityChooser {
       if(messageFormat == "text/plain") {
         browser.compose.beginNew({
           "identityId": identityId,
-          "isPlainText" : true,
-          "plainTextBody": ""
+          "isPlainText" : true
         });
       } else {
         browser.compose.beginNew({
           "identityId": identityId,
-          "isPlainText" : false,
-          "body": ""
+          "isPlainText" : false
         });
       }
     } else if(action == "reply") {
       var tabs = await browser.tabs.query({ "windowId": windowId });
       for (let tab of tabs) {
         var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
-        console.debug('IdentityChooser#identityChosen: reply to message: ', msg);
 
         if(msg != null) {
+          console.debug('IdentityChooser#identityChosen: reply to message: ', msg);
+
           if(messageFormat == "text/plain") {
             browser.compose.beginReply(msg.id,
                                        "replyToSender",
                                        { "identityId": identityId,
-                                         "isPlainText" : true,
-                                         "plainTextBody": ""
+                                         "isPlainText" : true
                                        });
           } else {
             browser.compose.beginReply(msg.id,
                                        "replyToSender",
                                        { "identityId": identityId,
-                                         "isPlainText" : false,
-                                         "body": ""
+                                         "isPlainText" : false
                                        });
           }
         }
