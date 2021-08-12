@@ -11,7 +11,7 @@ class IdentityChooser {
 
     try {
       await this.icOptions.setupDefaultOptions();
-    } catch (error) {
+    } catch (error) {
       //
       // Workaround. Several users report issues with Cardboox and
       // Identity Chooser accessing the browser.local store
