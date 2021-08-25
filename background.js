@@ -184,15 +184,13 @@ class IdentityChooser {
             browser.compose.beginReply(msg.id,
                                        "replyToAll",
                                        { "identityId": identityId,
-                                         "isPlainText" : true,
-                                         "plainTextBody": ""
+                                         "isPlainText" : true
                                        });
           } else {
             browser.compose.beginReply(msg.id,
                                        "replyToAll",
                                        { "identityId": identityId,
-                                         "isPlainText" : false,
-                                         "body": ""
+                                         "isPlainText" : false
                                        });
           }
         }
@@ -220,8 +218,7 @@ class IdentityChooser {
             browser.icForwardApi.beginForward(msg,
                                               forwardType,
                                               { "identityId": identityId,
-                                                "format" : "OppositeOfDefault",
-                                                "body": ""
+                                                "format" : "OppositeOfDefault"
                                               });
           }
         }
