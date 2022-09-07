@@ -15,6 +15,9 @@ export class IcIdentities {
       for (const identity of account.identities) {
         var props = identitiesProps[identity.id];
 
+        // inserting at index props.positionInMenu may create
+        // non-continious indices. We'll filter these empty indexes
+        // after this for loop.
         icIdentities[props.positionInMenu] = {
           "id": identity.id,
           "showInMenu": props.showInMenu,
@@ -23,6 +26,11 @@ export class IcIdentities {
         }
       }
     }
+
+
+    icIdentities = icIdentities.filter(function (el) {
+      return el != null;
+    });
 
     console.debug("IcIdentities#getIdentities -- end", icIdentities);
 
