@@ -150,7 +150,7 @@ class IdentityChooser {
         });
       }
     } else if(action == "reply") {
-      var tabs = await browser.tabs.query({ "windowId": windowId });
+      var tabs = await browser.tabs.query({ "windowId": windowId, "active": true });
       for (let tab of tabs) {
         var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
 
@@ -173,7 +173,7 @@ class IdentityChooser {
         }
       }
     } else if(action == "replyAll") {
-      var tabs = await browser.tabs.query({ "windowId": windowId });
+      var tabs = await browser.tabs.query({ "windowId": windowId, "active": true });
       for (let tab of tabs) {
         var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
 
@@ -200,7 +200,7 @@ class IdentityChooser {
       console.debug('IdentityChooser#identityChosen: forwardType: ',
                     forwardType);
 
-      var tabs = await browser.tabs.query({ "windowId": windowId });
+      var tabs = await browser.tabs.query({ "windowId": windowId, "active": true });
       for (let tab of tabs) {
         var msg = await browser.messageDisplay.getDisplayedMessage(tab.id);
         var window = await browser.windows.getCurrent();
