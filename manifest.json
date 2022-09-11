@@ -2,13 +2,13 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "3.2beta2",
+  "version": "3.2",
   "author": "Janek Schwarz",
   "default_locale": "en",
   "applications": {
     "gecko": {
       "id": "identitychooser@janek.org",
-      "strict_min_version": "91.0"
+      "strict_min_version": "91.0"g
     }
   },
   "permissions": [
