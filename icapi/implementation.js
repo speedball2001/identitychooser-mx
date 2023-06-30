@@ -1,5 +1,4 @@
 var { ExtensionCommon } = ChromeUtils.import("resource://gre/modules/ExtensionCommon.jsm");
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 var { EventEmitter } = ChromeUtils.import("resource://gre/modules/EventEmitter.jsm");
 
 var HTB = {};
@@ -366,8 +365,6 @@ var icApi = class extends ExtensionCommon.ExtensionAPI {
       }
     }
     // Clear caches that could prevent upgrades from working properly
-    const { Services } = ChromeUtils.import(
-      "resource://gre/modules/Services.jsm");
     Services.obs.notifyObservers(null, "startupcache-invalidate", null);
   }
   getAPI(context) {
