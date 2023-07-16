@@ -2,7 +2,6 @@
 /* taken and slightly modified from https://github.com/thundernest/addon-developer-support/tree/master/auxiliary-apis/LegacyPrefs */
 
 var { ExtensionCommon } = ChromeUtils.import("resource://gre/modules/ExtensionCommon.jsm");
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 var legacyPrefsApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
