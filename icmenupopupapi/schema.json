@@ -1,0 +1,25 @@
+[
+  {
+    "namespace": "icMenupopupApi",
+    "functions": [
+      {
+        "name": "createMenupopup",
+        "description": "create a menu popup structure in DOM",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "tabId",
+            "description": "tab id",
+            "type": "any"
+          },
+          {
+            "name": "menuId",
+            "description": "menu id",
+            "type": "any"
+          }
+        ]
+      }
+    ]
+  }
+]

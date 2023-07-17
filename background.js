@@ -2,12 +2,84 @@ import { Options } from './modules/options.js';
 import { IcIdentities } from '../modules/identities.js';
 
 class IdentityChooser {
+  self = {};
+
   constructor() {
     this.icOptions = new Options();
+    self = this;
+  }
+
+  async run2() {
+    console.debug("IdentityChooser#run2 -- begin");
+
+    browser.windows.getCurrent({populate: true}).then((window) => {
+      for (let tab of window.tabs) {
+        this.tabCreated(tab);
+      }
+    });
+
+    // browser.windows.onCreated.addListener(this.windowCreated);
+    // browser.windows.onRemoved.addListener(this.windowRemoved);
+
+    browser.tabs.onCreated.addListener(this.tabCreated);
+    browser.tabs.onUpdated.addListener(this.tabUpdated);
+    browser.tabs.onRemoved.addListener(this.tabRemoved);
+
+    console.debug("IdentityChooser#run2 -- end");
+
+    return;
+  }
+
+  async tabCreated(tab) {
+    console.log('IdentityChooser#tabCreated -- begin:' + tab.id);
+
+    console.log(tab);
+
+    if(tab.type == 'mail' && tab.status == 'complete') {
+      self.initNormalTab(tab);
+    } else if(tab.type == 'messageDisplay' && tab.status == 'complete') {
+      self.initMessageDisplayTab(tab);
+    }
+
+    console.log('IdentityChooser#tabCreated -- end:' + tab.id);
+  }
+
+  async tabUpdated(tabId, changeInfo, tab) {
+    console.log('IdentityChooser#tabUpdated -- begin: ' + tabId);
+
+    if(tab.type == 'mail' && changeInfo.status == 'complete') {
+      self.initNormalTab(tab);
+    } else if(tab.type == 'messageDisplay' && changeInfo.status == 'complete') {
+      self.initMessageDisplayTab(tab);
+    }
+
+    console.log(changeInfo);
+
+    console.log('IdentityChooser#tabUpdated -- end: ' + tabId);
+  }
+
+  async tabRemoved(tabId) {
+    console.log('IdentityChooser#tabRemoved: ' + tabId);
+  }
+
+  async initNormalTab(tab) {
+    let menuId = await browser.icMenupopupApi.createMenupopup(tab.id, 'icMenu1');
+    let menuId2 = await browser.icMenupopupApi.createMenupopup(tab.id, 'icMenu2');
+    let menuId3 = await browser.icMenupopupApi.createMenupopup(tab.id, 'icMenu3');
+  }
+
+  async initMessageDisplayTab(tab) {
+    alert('initMessageDisplayTab');
   }
 
   async run() {
     console.debug("IdentityChooser#run -- begin");
+
+    browser.windows.getCurrent().then((window) => this.initMenupopup(window));
+
+    return;
+
+    // console.debug(browser.document.getElementById("folderPaneWriteMessage"));
 
     try {
       await this.icOptions.setupDefaultOptions();
@@ -253,6 +325,6 @@ async function waitForLoad() {
 (async () => {
   await waitForLoad();
 
-  var identityChooser = new IdentityChooser();
-  waitForLoad().then((isAppStartup) => identityChooser.run());
+  const identityChooser = new IdentityChooser();
+  waitForLoad().then((isAppStartup) => identityChooser.run2());
 })()

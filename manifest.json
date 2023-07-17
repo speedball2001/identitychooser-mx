@@ -2,14 +2,14 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "3.2",
+  "version": "4.0b1",
   "author": "Janek Schwarz",
   "default_locale": "en",
   "applications": {
     "gecko": {
       "id": "identitychooser@janek.org",
-      "strict_min_version": "91.0",
-      "strict_max_version": "105.0"
+      "strict_min_version": "115.0",
+      "strict_max_version": "116.*"
     }
   },
   "permissions": [
@@ -46,6 +46,14 @@
         "scopes": [ "addon_parent" ],
         "paths": [[ "icForwardApi" ]],
         "script": "icforwardapi/implementation.js"
+      }
+    },
+    "icMenupopupApi": {
+      "schema": "icmenupopupapi/schema.json",
+      "parent": {
+        "scopes": [ "addon_parent" ],
+        "paths": [[ "icMenupopupApi" ]],
+        "script": "icmenupopupapi/implementation.js"
       }
     },
     "legacyPrefsApi": {
