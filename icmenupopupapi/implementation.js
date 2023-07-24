@@ -62,6 +62,7 @@ class Menupopup {
                                                          'menuitem');
     menuItem.id = menuitemId;
     menuItem.setAttribute('label', label);
+    menuItem.setAttribute('value', menuitemId);
 
     menuPopup.appendChild(menuItem);
   }
