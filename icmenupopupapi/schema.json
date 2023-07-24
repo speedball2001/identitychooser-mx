@@ -19,6 +19,34 @@
             "type": "any"
           }
         ]
+      },
+      {
+        "name": "addMenuitem",
+        "description": "add a sub menu popup structure to DOM",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "tabId",
+            "description": "tab id",
+            "type": "any"
+          },
+          {
+            "name": "menuId",
+            "description": "menu id",
+            "type": "any"
+          },
+          {
+            "name": "menuitemId",
+            "description": "menu item id",
+            "type": "any"
+          },
+          {
+            "name": "label",
+            "description": "menu label",
+            "type": "any"
+          }
+        ]
       }
     ]
   }

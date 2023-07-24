@@ -12,14 +12,35 @@ class IdentityChooser {
   async run2() {
     console.debug("IdentityChooser#run2 -- begin");
 
+    try {
+      await this.icOptions.setupDefaultOptions();
+    } catch (error) {
+      //
+      // Workaround. Several users report issues with Cardboox and
+      // Identity Chooser accessing the browser.local store
+      // (https://github.com/speedball2001/identitychooser-mx/issues/18:
+      //
+      //    20:30:33.873 TransactionInactiveError: A request was placed
+      //    against a transaction which is currently not active, or which
+      //    is finished. IndexedDB.jsm:101:46
+      //
+      // Assuming that this error is caused by a timing issue while
+      // accessing the store concurrently, we simply try to circumvent this by
+      // reloading ourselves
+
+      console.debug("Caught exception while reading settings. Reloading extension.", error);
+      browser.runtime.reload();
+    }
+
+    browser.icApi.onIdentityChosen.addListener(
+        (identityId, action, windowId, info) => this.identityChosen(identityId, action, windowId, info));
+    console.debug('IdentityChooser#run: onIdentityChosen listener registered');
+
     browser.windows.getCurrent({populate: true}).then((window) => {
       for (let tab of window.tabs) {
         this.tabCreated(tab);
       }
     });
-
-    // browser.windows.onCreated.addListener(this.windowCreated);
-    // browser.windows.onRemoved.addListener(this.windowRemoved);
 
     browser.tabs.onCreated.addListener(this.tabCreated);
     browser.tabs.onUpdated.addListener(this.tabUpdated);
@@ -36,7 +57,7 @@ class IdentityChooser {
     console.log(tab);
 
     if(tab.type == 'mail' && tab.status == 'complete') {
-      self.initNormalTab(tab);
+      self.init3PaneTab(tab);
     } else if(tab.type == 'messageDisplay' && tab.status == 'complete') {
       self.initMessageDisplayTab(tab);
     }
@@ -48,7 +69,7 @@ class IdentityChooser {
     console.log('IdentityChooser#tabUpdated -- begin: ' + tabId);
 
     if(tab.type == 'mail' && changeInfo.status == 'complete') {
-      self.initNormalTab(tab);
+      self.init3PaneTab(tab);
     } else if(tab.type == 'messageDisplay' && changeInfo.status == 'complete') {
       self.initMessageDisplayTab(tab);
     }
@@ -62,10 +83,38 @@ class IdentityChooser {
     console.log('IdentityChooser#tabRemoved: ' + tabId);
   }
 
-  async initNormalTab(tab) {
-    let menuId = await browser.icMenupopupApi.createMenupopup(tab.id, 'icMenu1');
-    let menuId2 = await browser.icMenupopupApi.createMenupopup(tab.id, 'icMenu2');
-    let menuId3 = await browser.icMenupopupApi.createMenupopup(tab.id, 'icMenu3');
+  async init3PaneTab(tab) {
+    console.debug('IdentityChooser#run: iterate over accounts and identities');
+    var icIdentities = new IcIdentities(this.icOptions);
+    var identities = await icIdentities.getIdentities();
+
+    let menuId = await browser.icMenupopupApi.createMenupopup(tab.id,
+                                                              'ic-new-message-popup');
+
+    for (const identity of identities) {
+      if (identity !== undefined){
+        console.debug(`IdentityChooser#run: found ${identity.accountId}, ${identity.id}`);
+        if (identity.showInMenu) {
+          var icIdentity = {
+            "id": identity.id,
+            "label": identity.label
+          }
+
+          var isEnabledComposeMessage =
+            await this.icOptions.isEnabledComposeMessage();
+          if (isEnabledComposeMessage) {
+            console.debug('IdentityChooser#run: add identity ',
+                          icIdentity,
+                          'to compose');
+            let menuId =
+                await browser.icMenupopupApi.addMenuitem(tab.id,
+                                                         'ic-new-message-popup',
+                                                         identity.id,
+                                                         identity.label);
+          }
+        }
+      }
+    }
   }
 
   async initMessageDisplayTab(tab) {
@@ -74,12 +123,6 @@ class IdentityChooser {
 
   async run() {
     console.debug("IdentityChooser#run -- begin");
-
-    browser.windows.getCurrent().then((window) => this.initMenupopup(window));
-
-    return;
-
-    // console.debug(browser.document.getElementById("folderPaneWriteMessage"));
 
     try {
       await this.icOptions.setupDefaultOptions();
