@@ -1,4 +1,5 @@
 var { ExtensionCommon } = ChromeUtils.import("resource://gre/modules/ExtensionCommon.jsm");
+var { EventEmitter } = ChromeUtils.import("resource://gre/modules/EventEmitter.jsm");
 
 const xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
 
@@ -19,6 +20,7 @@ class Menupopup {
     let menuPopup = current3Pane.document.createElementNS(xulNS,
                                                           'menupopup');
     menuPopup.id = menuId;
+    menuPopup.addEventListener("command", (event) => this.popupClicked(event, menuId, tabId));
     popupSet.appendChild(menuPopup);
 
     this.addToManagedMenus(tabId, menuPopup, current3Pane);
@@ -88,9 +90,44 @@ class Menupopup {
       this.managedMenus[tabId] = [ menu, current3Pane ];
     }
   }
+
+  popupClicked(event, menuId, tabId) {
+    console.log("popupClicked");
+    console.log(event);
+    console.log("tabId: " + tabId);
+    console.log("menuId: " + menuId);
+
+    let src = event.target;
+    let info = [];
+
+    if(event.shiftKey) {
+      info.push("Shift");
+    }
+
+    if(event.ctrlKey) {
+      info.push("Ctrl");
+    }
+
+    if(event.altKey) {
+      info.push("Alt");
+    }
+
+    if(event.metaKey) {
+      info.push("Command");
+    }
+
+    var menuitemId = src.value;
+    eventEmitter.emit("menu-command-event",
+                      menuitemId,
+                      menuId,
+                      tabId,
+                      info);
+
+  }
 }
 
 const menuPopup = new Menupopup();
+const eventEmitter = new EventEmitter();
 
 var icMenupopupApi = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
@@ -109,7 +146,21 @@ var icMenupopupApi = class extends ExtensionCommon.ExtensionAPI {
           console.log('addMenuitem: ' + tabId + '|' + menuId);
 
           return menuPopup.addMenuitem(tabId, menuId, menuitemId, label);
-        }
+        },
+        onMenuClicked: new ExtensionCommon.EventManager({
+          context,
+          name: "icMenupopupApi.onMenuClicked",
+          register(fire) {
+            function callback(event, menuitemId, menuId, tabId, info) {
+              return fire.async(menuitemId, menuId, tabId, info);
+            }
+
+            eventEmitter.on("menu-command-event", callback);
+            return function() {
+              eventEmitter.off("menu-command-event", callback);
+            };
+          },
+        }).api()
       }
     }
   }

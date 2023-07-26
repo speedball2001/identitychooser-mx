@@ -32,9 +32,9 @@ class IdentityChooser {
       browser.runtime.reload();
     }
 
-    browser.icApi.onIdentityChosen.addListener(
-        (identityId, action, windowId, info) => this.identityChosen(identityId, action, windowId, info));
-    console.debug('IdentityChooser#run: onIdentityChosen listener registered');
+    browser.icMenupopupApi.onMenuClicked.addListener(
+        (menuitemId, menuId, tabId, info) => this.menuItemClicked(menuitemId, menuId, tabId, info));
+    console.debug('IdentityChooser#run: onMenuClicked listener registered');
 
     browser.windows.getCurrent({populate: true}).then((window) => {
       for (let tab of window.tabs) {
@@ -49,6 +49,42 @@ class IdentityChooser {
     console.debug("IdentityChooser#run2 -- end");
 
     return;
+  }
+
+  async menuItemClicked(menuitemId, menuId, tabId, info) {
+    console.log('background: menuItemClicked');
+
+    console.log(menuitemId);
+    console.log(menuId);
+    console.log(tabId);
+    console.log(info);
+
+    let identityId = menuitemId;
+    let messageFormat = await browser.composePrefsApi.getMessageFormat(identityId);
+
+    if(info.includes("Shift")) {
+      if(messageFormat == "text/plain") {
+        messageFormat = "text/html";
+      } else {
+        messageFormat = "text/plain";
+      }
+    }
+
+    console.debug('IdentityChooser#menuItemClicked: messageFormat: ', messageFormat);
+    if(menuId == "ic-new-message-popup") {
+      console.debug('IdentityChooser#menuItemClicked: open compose editor');
+      if(messageFormat == "text/plain") {
+        browser.compose.beginNew({
+          "identityId": identityId,
+          "isPlainText" : true
+        });
+      } else {
+        browser.compose.beginNew({
+          "identityId": identityId,
+          "isPlainText" : false
+        });
+      }
+    }
   }
 
   async tabCreated(tab) {
