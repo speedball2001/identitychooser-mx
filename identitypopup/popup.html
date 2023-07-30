@@ -2,14 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-<head>
-  <title>Popup</title>
-  <script src="popup.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8"/>
 
-<body>
-  <input id="button_ok" type="button" data="ok" value="OK">
-  <input id="button_cancel" type="button" data="cancel" value="CANCEL">
-</body>
+    <title data-l10n-id="identitiesPopup_identitiesPopupTitle">Bitte Absender wählen</title>
+    <script type="module" src="popup.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="popup.css"/>
+  </head>
+
+  <body>
+    <ul id="icIdentityList"/>
+  </body>
 
 </html>

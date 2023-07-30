@@ -1,19 +1,71 @@
+import { Options } from './modules/options.js';
+import { IcIdentities } from '../modules/identities.js';
+
 class IdentityChooser {
   constructor() {
     this.activeIdentityWindows = [];
+
+    this.icOptions = new Options();
   }
 
   async run() {
     console.log("Identity Chooser#run");
 
+    try {
+      await this.icOptions.setupDefaultOptions();
+    } catch (error) {
+      //
+      // Workaround. Several users report issues with Cardboox and
+      // Identity Chooser accessing the browser.local store
+      // (https://github.com/speedball2001/identitychooser-mx/issues/18:
+      //
+      //    20:30:33.873 TransactionInactiveError: A request was placed
+      //    against a transaction which is currently not active, or which
+      //    is finished. IndexedDB.jsm:101:46
+      //
+      // Assuming that this error is caused by a timing issue while
+      // accessing the store concurrently, we simply try to circumvent this by
+      // reloading ourselves
+
+      console.debug("Caught exception while reading settings. Reloading extension.", error);
+      browser.runtime.reload();
+    }
+
     browser.tabs.onCreated.addListener(async (tab) => this.tabCreated(tab));
   }
 
   async tabCreated(tab) {
-    console.log(tab);
-
     if(tab.type != 'messageCompose') {
       return;
+    }
+
+    let composeDetails = await browser.compose.getComposeDetails(tab.id);
+
+    if(composeDetails.type == "new") {
+      var isEnabledComposeMessage =
+          await this.icOptions.isEnabledComposeMessage();
+
+      if(!isEnabledComposeMessage) {
+        return;
+      }
+    }
+
+    if(composeDetails.type == "reply") {
+      var isEnabledReplyMessage =
+          await this.icOptions.isEnabledReplyMessage();
+
+      if(!isEnabledReplyMessage) {
+        return;
+      }
+    }
+
+    if(composeDetails.type == "forward") {
+      var isEnabledForwardMessage =
+          await this.icOptions.isEnabledForwardMessage();
+
+      if(!isEnabledForwardMessage) {
+        return;
+      }
     }
 
     let identityWindow = await browser.windows.create({
@@ -29,34 +81,56 @@ class IdentityChooser {
     let idRemovedListener = async (windowId) => this.windowRemoved(windowId,
                                                                    identityWindow.id);
 
-    this.activeIdentityWindows[identityWindow.id] = {
+    let activeIdentityWindow = {
       identityWindowId: identityWindow.id,
       composeWindowId: tab.windowId,
       removedListener: idRemovedListener,
       focusListener: idFocusListener,
     };
 
-    browser.windows.onFocusChanged.addListener(
-      this.activeIdentityWindows[identityWindow.id].focusListener);
-    browser.windows.onRemoved.addListener(
-      this.activeIdentityWindows[identityWindow.id].removedListener);
+    this.activeIdentityWindows.push(activeIdentityWindow);
 
-    let rv = await this.popupPrompt(identityWindow.id, "cancel");
-    console.log(rv);
+    console.log(this.activeIdentityWindows);
+
+    browser.windows.onFocusChanged.addListener(
+      activeIdentityWindow.focusListener);
+    browser.windows.onRemoved.addListener(
+      activeIdentityWindow.removedListener);
+
+    let chosenIdentity = await this.popupPrompt(identityWindow.id, null);
+
+    if(chosenIdentity != null) {
+      browser.compose.setComposeDetails(tab.id, { identityId: chosenIdentity });
+    }
   }
 
   async windowRemoved(windowId, identityWindowId) {
-    let identityWindow = this.activeIdentityWindows[identityWindowId];
+    console.log("windowRemoved: " + windowId + "|" + identityWindowId);
+
+    let identityWindow = this.activeIdentityWindows.find(e => e.identityWindowId == identityWindowId);
     let composeWindowId = identityWindow.composeWindowId;
 
     if(windowId == identityWindowId) {
+      // identity window closed
       browser.windows.onFocusChanged.removeListener(identityWindow.focusListener);
       browser.windows.onRemoved.removeListener(identityWindow.removedListener);
+
+      let idx = this.activeIdentityWindows.findIndex(e => e.identityWindowId == identityWindowId);
+      this.activeIdentityWindows.splice(idx, 1);
+
+      console.log(this.activeIdentityWindows);
+    }
+
+    if(windowId == composeWindowId) {
+      // composer window closed
+      console.log("composer closed");
+
+      browser.windows.remove(identityWindowId);
     }
   }
 
   async focusChanged(windowId, identityWindowId) {
-    let identityWindow = this.activeIdentityWindows[identityWindowId];
+    let identityWindow = this.activeIdentityWindows.find(e => e.identityWindowId == identityWindowId);
     let composeWindowId = identityWindow.composeWindowId;
 
     if(windowId == composeWindowId) {

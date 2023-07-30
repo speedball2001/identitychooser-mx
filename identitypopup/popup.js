@@ -1,13 +1,46 @@
-window.addEventListener("load", onLoad);
+import { Options } from '../modules/options.js';
+import { IcIdentities } from '../modules/identities.js';
 
-async function notifyMode(event) {
-  await messenger.runtime.sendMessage({
-    popupResponse: event.target.getAttribute("data")
-  });
-  window.close();
+class IdentitiesPopup
+{
+  constructor() {
+  }
+
+  async run(e) {
+    console.log("run");
+
+    let options = new Options();
+
+    let icIdentities = new IcIdentities(options);
+
+    let identities = await icIdentities.getIdentities();
+    let identitiesList = document.getElementById("icIdentityList");
+
+    for(const identity of identities) {
+      if(identity.showInMenu) {
+        console.log(identity.label);
+
+        let li = document.createElement("li");
+        let button = document.createElement("button");
+        button.setAttribute("type", "button");
+        button.setAttribute("data", identity.id);
+        button.addEventListener("click", this.identityButtonClicked);
+        button.innerHTML = identity.label;
+
+        li.appendChild(button);
+        identitiesList.appendChild(li);
+      }
+    }
+  }
+
+  async identityButtonClicked(event) {
+    await messenger.runtime.sendMessage({
+      popupResponse: event.target.getAttribute("data")
+    });
+
+    window.close();
+  }
 }
 
-async function onLoad() {
-  document.getElementById("button_ok").addEventListener("click", notifyMode);
-  document.getElementById("button_cancel").addEventListener("click", notifyMode);
-}
+var identitiesPopup = new IdentitiesPopup();
+document.addEventListener("DOMContentLoaded", (e) => identitiesPopup.run(e), {once: true});
