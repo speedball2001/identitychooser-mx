@@ -8,8 +8,8 @@
   "applications": {
     "gecko": {
       "id": "identitychooser@janek.org",
-      "strict_min_version": "91.0",
-      "strict_max_version": "105.0"
+      "strict_min_version": "115.0",
+      "strict_max_version": "116.0"
     }
   },
   "permissions": [
