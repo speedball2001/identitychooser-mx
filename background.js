@@ -9,8 +9,6 @@ class IdentityChooser {
   }
 
   async run() {
-    console.log("Identity Chooser#run");
-
     try {
       await this.icOptions.setupDefaultOptions();
     } catch (error) {
@@ -93,8 +91,6 @@ class IdentityChooser {
 
     this.activeIdentityWindows.push(activeIdentityWindow);
 
-    console.log(this.activeIdentityWindows);
-
     browser.windows.onFocusChanged.addListener(
       activeIdentityWindow.focusListener);
     browser.windows.onRemoved.addListener(
@@ -108,8 +104,6 @@ class IdentityChooser {
   }
 
   async windowRemoved(windowId, identityWindowId) {
-    console.log("windowRemoved: " + windowId + "|" + identityWindowId);
-
     let identityWindow = this.activeIdentityWindows.find(e => e.identityWindowId == identityWindowId);
     let composeWindowId = identityWindow.composeWindowId;
 
@@ -120,14 +114,10 @@ class IdentityChooser {
 
       let idx = this.activeIdentityWindows.findIndex(e => e.identityWindowId == identityWindowId);
       this.activeIdentityWindows.splice(idx, 1);
-
-      console.log(this.activeIdentityWindows);
     }
 
     if(windowId == composeWindowId) {
       // composer window closed
-      console.log("composer closed");
-
       browser.windows.remove(identityWindowId);
     }
   }
@@ -139,10 +129,6 @@ class IdentityChooser {
     if(windowId == composeWindowId) {
       browser.windows.update(identityWindowId, { focused: true });
     }
-
-    console.log("windowId: " + windowId);
-    console.log("composeWindowId: " + composeWindowId);
-    console.log("identityWindowId: " + identityWindowId);
   }
 
   async popupPrompt(popupId, defaultResponse) {
@@ -156,11 +142,11 @@ class IdentityChooser {
     return new Promise(resolve => {
       let response = defaultResponse;
       function windowRemoveListener(closedId) {
-	if (popupId == closedId) {
-	  messenger.windows.onRemoved.removeListener(windowRemoveListener);
-	  messenger.runtime.onMessage.removeListener(messageListener);
+        if (popupId == closedId) {
+          messenger.windows.onRemoved.removeListener(windowRemoveListener);
+          messenger.runtime.onMessage.removeListener(messageListener);
           resolve(response);
-	}
+        }
       }
       function messageListener(request, sender, sendResponse) {
         if (sender.tab.windowId != popupId || !request) {
