@@ -100,6 +100,8 @@ class IdentityChooser {
 
     if(chosenIdentity != null) {
       browser.compose.setComposeDetails(tab.id, { identityId: chosenIdentity });
+    } else {
+      browser.windows.remove(composeWindow.id);
     }
   }
 
@@ -146,7 +148,7 @@ class IdentityChooser {
           messenger.windows.onRemoved.removeListener(windowRemoveListener);
           messenger.runtime.onMessage.removeListener(messageListener);
           resolve(response);
-        }
+  }
       }
       function messageListener(request, sender, sendResponse) {
         if (sender.tab.windowId != popupId || !request) {
