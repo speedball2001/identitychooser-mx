@@ -67,8 +67,9 @@ class IdentityChooser {
     }
 
     let composeWindow = await browser.windows.get(tab.windowId);
+    const popUrl = browser.runtime.getURL("identitypopup/popup.html");
     let identityWindow = await browser.windows.create({
-      url: "identitypopup/popup.html",
+      url: popUrl,
       type: "popup",
       height: 300,
       width: 450,
@@ -148,7 +149,7 @@ class IdentityChooser {
           messenger.windows.onRemoved.removeListener(windowRemoveListener);
           messenger.runtime.onMessage.removeListener(messageListener);
           resolve(response);
-  }
+        }
       }
       function messageListener(request, sender, sendResponse) {
         if (sender.tab.windowId != popupId || !request) {

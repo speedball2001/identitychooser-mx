@@ -1,3 +1,83 @@
-* {
-    background: red;
+/* identity chooser styles */
+
+@media (prefers-color-scheme: dark) {
+  .adaptive {
+    background: #753;
+    color: #dcb;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .adaptive {
+    background: rgb(229, 204, 178);
+    color: rgb(66, 38, 9);
+  }
+}
+
+body * {
+  font-family: system-ui, sans-serif;
+}
+
+.wrapper {
+  margin: 0.8em auto;
+}
+
+ul#icIdentityList {
+  display: flex;
+  flex-direction: column;
+}
+
+ul#icIdentityList li {
+  width: 80%;
+  color: white;
+  list-style: none;
+  background: #1b2c42;
+  margin: 0.5em auto;
+}
+ul#icIdentityList li:hover {
+  background-color: white;
+  color: rgb(60,60,60,0.6);
+}
+ul#icIdentityList li > button {
+  -moz-appearance: none;
+  display: block;
+  width: 100%;
+}
+
+button {
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 ;
+  text-decoration: none;
+  background: #1b2c42;
+  color: #ffffff;
+  /* font-size: 1rem; */
+  cursor: pointer;
+  text-align: left;
+  transition: background 250ms ease-in-out,
+              transform 150ms ease;
+  -moz-appearance: none;
+}
+
+button:hover,
+button:focus {
+  border-radius: 0.6em;
+  background-color: var(--button-primary-background-color,rgb(19, 115, 217));
+  color: var(--button-primary-text-color,white);
+}
+
+button#cancel {
+  margin: 1em auto;
+  border-radius:0.5em !important;;
+  margin: 1em auto;
+  background-color: var(--button-primary-background-color,rgb(19, 115, 217));
+  color: var(--button-primary-text-color,white);
+}
+button#cancel:hover {
+  background-color: var(--button-primary-hover-background-color,rgb(28, 131, 228));
+  color: var(--button-primary-text-color,white);
+}
+
+#bottomRow {
+  text-align: center;
 }
