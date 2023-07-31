@@ -31,6 +31,10 @@ class IdentitiesPopup
         identitiesList.appendChild(li);
       }
     }
+
+    let cancelBtn = document.getElementById("cancel");
+    cancelBtn.setAttribute("data", "cancel");
+    cancelBtn.addEventListener("click", this.identityButtonClicked);
   }
 
   async identityButtonClicked(event) {
