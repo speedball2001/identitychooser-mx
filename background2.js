@@ -71,8 +71,8 @@ class IdentityChooser {
     let identityWindow = await browser.windows.create({
       url: "identitypopup/popup.html",
       type: "popup",
-      height: 280,
-      width: 390,
+      height: 300,
+      width: 450,
       allowScriptsToClose: true,
     });
 
