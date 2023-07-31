@@ -12,12 +12,6 @@ export class Options {
       icEnableReplyMessage: true,
       icEnableForwardMessage: true
     };
-
-    this.tb68MigratablePrefs = {
-      "extensions.org.janek.IdentityChooser.extendButtonNewmsg": "icEnableComposeMessage",
-      "extensions.org.janek.IdentityChooser.extendButtonForward": "icEnableForwardMessage",
-      "extensions.org.janek.IdentityChooser.extendButtonReply": "icEnableReplyMessage"
-    }
   }
 
   async setupDefaultOptions() {
@@ -25,13 +19,6 @@ export class Options {
 
     var icOptions = await browser.storage.local.get(this.defaultOptionKeys);
     console.debug('Option#setupDefaultOptions: locally stored options:',  icOptions);
-
-    if(Object.entries(icOptions).length == 0) {
-      console.debug('Option#setupDefaultOptions: not stored options -> migrate TB68 prefs to local storage');
-      icOptions = await this.migrateFromTB68Prefs();
-
-      console.debug('Option#setupDefaultOptions: found TB68 prefs', icOptions);
-    }
 
     for(const [optionName, defaultValue] of Object.entries(this.defaultOptions)) {
       if(!(optionName in icOptions)) {
@@ -71,25 +58,6 @@ export class Options {
     }
 
     console.debug("Option#setupDefaultOptions -- end");
-  }
-
-  async migrateFromTB68Prefs() {
-    console.debug("Options#migrateFromTB68Prefs -- begin");
-
-    var ret = {}
-    for(const [legacyPrefName, optionName] of Object.entries(this.tb68MigratablePrefs)) {
-      var legacyPrefValue =
-          await browser.legacyPrefsApi.get(legacyPrefName,
-                                           this.defaultOptions[optionName]);
-
-      if(legacyPrefValue != null) {
-        ret[optionName] = legacyPrefValue;
-        browser.storage.local.set({ [optionName] : legacyPrefValue });
-      }
-    }
-
-    console.debug("Options#migrateFromTB68Prefs -- end");
-    return ret;
   }
 
   async isEnabledComposeMessage() {

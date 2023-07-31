@@ -9,7 +9,7 @@
     "gecko": {
       "id": "identitychooser@janek.org",
       "strict_min_version": "115.0",
-      "strict_max_version": "116.0"
+      "strict_max_version": "116.*"
     }
   },
   "permissions": [
@@ -22,39 +22,5 @@
     "page": "options/options.html",
     "browser_style": true,
     "open_in_tab": true
-  },
- "experiment_apis": {
-    "icApi": {
-      "schema": "icapi/schema.json",
-      "parent": {
-        "scopes": [ "addon_parent" ],
-        "paths": [[ "icApi" ]],
-        "script": "icapi/implementation.js"
-      }
-    },
-    "composePrefsApi": {
-      "schema": "composeprefsapi/schema.json",
-      "parent": {
-        "scopes": [ "addon_parent" ],
-        "paths": [[ "composePrefsApi" ]],
-        "script": "composeprefsapi/implementation.js"
-      }
-    },
-    "icForwardApi": {
-      "schema": "icforwardapi/schema.json",
-      "parent": {
-        "scopes": [ "addon_parent" ],
-        "paths": [[ "icForwardApi" ]],
-        "script": "icforwardapi/implementation.js"
-      }
-    },
-    "legacyPrefsApi": {
-      "schema": "legacyprefsapi/schema.json",
-      "parent": {
-        "scopes": [ "addon_parent" ],
-        "paths": [[ "legacyPrefsApi" ]],
-        "script": "legacyprefsapi/implementation.js"
-      }
-    }
   }
 }
