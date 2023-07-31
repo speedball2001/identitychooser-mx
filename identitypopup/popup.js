@@ -25,7 +25,7 @@ class IdentitiesPopup
         button.setAttribute("type", "button");
         button.setAttribute("data", identity.id);
         button.addEventListener("click", this.identityButtonClicked);
-        button.innerHTML = identity.label;
+        button.textContent = identity.label;
 
         li.appendChild(button);
         identitiesList.appendChild(li);
