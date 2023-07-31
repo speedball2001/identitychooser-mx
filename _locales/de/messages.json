@@ -34,5 +34,14 @@
   },
   "options_icWarnColorsHint": {
     "message": "<p>Frühere Version von Identity Chooser boten die Möglichkeit, den Hintergrund des Emaileditors beim Verfassen für verschiedene Absender unterschiedlich einzufärben.</p><p>Bis auf weiteres ist diese Funktion nicht mehr verfügbar.</p><p>Ich empfehle stattdessen das Addon <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1], das eine ähnliche Funktionalität bereitstellt. </p><p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
+  },
+  "identitiesPopup_identitiesPopupTitle": {
+    "message": "Identity Chooser"
+  },
+  "identitiesPopup_instructions": {
+    "message": "Bitte Absenderadresse auswählen:"
+  },
+  "identitiesPopup_cancelButton": {
+    "message": "Abbrechen"
   }
 }

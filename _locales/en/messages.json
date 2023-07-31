@@ -34,6 +34,14 @@
   },
   "options_icWarnColorsHint": {
     "message": "<p>Earlier versions of Identity Chooser offered the possibility to color the background of the email editor differently for different senders when composing.</p><p>This functionality is no longer available until further notice.</p><p>Instead, I recommend the addon <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1], which provides a similar functionality.<p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
+  },
+  "identitiesPopup_identitiesPopupTitle": {
+    "message": "Identity Chooser"
+  },
+  "identitiesPopup_instructions": {
+    "message": "Please select an identity to proceed:"
+  },
+  "identitiesPopup_cancelButton": {
+    "message": "Cancel"
   }
-
 }

@@ -7,7 +7,7 @@ class IdentitiesPopup
   }
 
   async run(e) {
-    console.log("run");
+    await this.localizePage();
 
     let options = new Options();
 
@@ -43,6 +43,30 @@ class IdentitiesPopup
     });
 
     window.close();
+  }
+
+  async localizePage() {
+    console.debug("Popup#localizePage -- start");
+
+    for (let el of document.querySelectorAll("[data-l10n-id]")) {
+      let id = el.getAttribute("data-l10n-id");
+      let i18nMessage = browser.i18n.getMessage(id);
+      if(i18nMessage == "") {
+        i18nMessage = id;
+      }
+      el.textContent = i18nMessage;
+    }
+
+    for (let el of document.querySelectorAll("[data-html-l10n-id]")) {
+      let id = el.getAttribute("data-html-l10n-id");
+      let i18nMessage = browser.i18n.getMessage(id);
+      if(i18nMessage == "") {
+        i18nMessage = id;
+      }
+      el.insertAdjacentHTML('afterbegin', i18nMessage);
+    }
+
+    console.debug("Popup#localizePage -- end");
   }
 }
 
