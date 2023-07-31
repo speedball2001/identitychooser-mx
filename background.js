@@ -68,11 +68,14 @@ class IdentityChooser {
       }
     }
 
+    let composeWindow = await browser.windows.get(tab.windowId);
     let identityWindow = await browser.windows.create({
       url: "identitypopup/popup.html",
       type: "popup",
       height: 300,
       width: 450,
+      left: composeWindow.left + 100,
+      top: composeWindow.top +100,
       allowScriptsToClose: true,
     });
 
