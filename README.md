@@ -30,8 +30,8 @@ version.  Development releases might be available earlier in the
 
 ## Notes
 
-Starting with version 4, Identity Chooser is a pure mail extension
-without using any experiment APIs.
+Starting with version 4, Identity Chooser is a pure mail extension and
+doesn't use any experiment APIs.
 
 ## Attribution
 
