@@ -28,14 +28,13 @@ version.  Development releases might be available earlier in the
   [ic-mx]: https://addons.thunderbird.net/addon/identity-chooser/
   [releases]: https://github.com/speedball2001/identitychooser-mx/releases
 
+## Notes
+
+Starting with version 4, Identity Chooser is a pure mail extension
+without using any experiment APIs.
 
 ## Attribution
 
 This addon uses code from other projects:
 
   * \[sortable.js\]: https://github.com/SortableJS/sortablejs
-  
-  * \[legacyprefs\]: https://github.com/thundernest/addon-developer-support/tree/master/auxiliary-apis/LegacyPrefs
-  
-  * \[hackToolbarbutton\]: https://github.com/thundernest/addon-developer-support/tree/master/scripts/hackToolbarbutton
-  
