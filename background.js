@@ -37,6 +37,12 @@ class IdentityChooser {
       return;
     }
 
+    console.log("vor sendMessage");
+    let ret = await browser.runtime.sendMessage("bordercolors-d@addonsdev.mozilla.org", {command: "getAllIdentitiesColors"});
+
+    console.log("nach sendMessage:");
+    console.log(ret);
+
     let composeDetails = await browser.compose.getComposeDetails(tab.id);
 
     if(composeDetails.type == "new") {
