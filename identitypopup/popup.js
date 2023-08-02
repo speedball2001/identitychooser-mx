@@ -35,16 +35,17 @@ class IdentitiesPopup
         button.setAttribute("type", "button");
         button.setAttribute("data", identity.id);
         button.addEventListener("click", this.identityButtonClicked);
+
         if(borderColors != null) {
           // button.classList.add("with-border-color");
           let dotEl = document.createElement("span");
           dotEl.classList.add("border-color");
           button.appendChild(dotEl);
-        }
 
-        if(identity.id in borderColors &&
-           borderColors[identity.id] !== undefined) {
-          button.style.setProperty("--bullet-color", borderColors[identity.id]);
+          if(identity.id in borderColors &&
+             borderColors[identity.id] !== undefined) {
+            button.style.setProperty("--bullet-color", borderColors[identity.id]);
+          }
         }
 
         let textEl = document.createElement("span");
