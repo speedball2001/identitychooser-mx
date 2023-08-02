@@ -99,12 +99,10 @@ class IdentityChooser {
 
     let chosenIdentity = await this.popupPrompt(identityWindow.id, null);
 
-    if(chosenIdentity == "cancel") {
+    if(chosenIdentity == null || chosenIdentity == "cancel") {
       browser.windows.remove(composeWindow.id);
     } else if(chosenIdentity != null) {
       browser.compose.setComposeDetails(tab.id, { identityId: chosenIdentity });
-    } else {
-      browser.windows.remove(composeWindow.id);
     }
   }
 
