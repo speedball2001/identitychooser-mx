@@ -16,16 +16,41 @@ class IdentitiesPopup
     let identities = await icIdentities.getIdentities();
     let identitiesList = document.getElementById("icIdentityList");
 
+    let borderColors = null;
+    try {
+      let resp = await browser.runtime.sendMessage("bordercolors-d@addonsdev.mozilla.org", {command: "getAllIdentitiesColors"});
+
+      if(resp && resp.command === "getAllIdentitiesColors") {
+        borderColors = resp.data;
+      }
+    } catch(error) {
+      // Border Colores not installed or otherwise available; eat the
+      // exception
+    }
+
     for(const identity of identities) {
       if(identity.showInMenu) {
-        console.log(identity.label);
-
         let li = document.createElement("li");
         let button = document.createElement("button");
         button.setAttribute("type", "button");
         button.setAttribute("data", identity.id);
         button.addEventListener("click", this.identityButtonClicked);
-        button.textContent = identity.label;
+
+        if(borderColors != null) {
+          // button.classList.add("with-border-color");
+          let dotEl = document.createElement("span");
+          dotEl.classList.add("border-color");
+          button.appendChild(dotEl);
+
+          if(identity.id in borderColors &&
+             borderColors[identity.id] !== undefined) {
+            button.style.setProperty("--bullet-color", borderColors[identity.id]);
+          }
+        }
+
+        let textEl = document.createElement("span");
+        textEl.textContent = identity.label;
+        button.appendChild(textEl);
 
         li.appendChild(button);
         identitiesList.appendChild(li);
@@ -39,7 +64,7 @@ class IdentitiesPopup
 
   async identityButtonClicked(event) {
     await messenger.runtime.sendMessage({
-      popupResponse: event.target.getAttribute("data")
+      popupResponse: event.target.closest("button").getAttribute("data")
     });
 
     window.close();
