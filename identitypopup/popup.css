@@ -53,6 +53,7 @@ body, html {
 ul#icIdentityList {
   display: flex;
   flex-direction: column;
+  padding: 0px;
 }
 
 ul#icIdentityList li {
