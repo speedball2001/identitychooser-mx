@@ -21,19 +21,19 @@
     "message": "Show List of Identities When Clicking on Forward button"
   },
   "options_restart.hint": {
-    "message": "Hint: If you change any of these options you need to restart Thunderbird"
+    "message": "Hint: If you change any of these options you may need to restart Thunderbird"
   },
   "options_sortOptionsTitle": {
     "message": "Sort Order"
   },
   "options_sortOrder.hint": {
-    "message": "Resort the identities here using drag and drop. You can hide an identity from the compose/reply/forward buttons by unchecking it:"
+    "message": "Resort the identities here using drag and drop. You can hide an identity from Identity Chooser's menu by unchecking the email address here:"
   },
   "options_icWarnColorsTitle": {
     "message": "Warnings Colors"
   },
   "options_icWarnColorsHint": {
-    "message": "<p>Earlier versions of Identity Chooser offered the possibility to color the background of the email editor differently for different senders when composing.</p><p>This functionality is no longer available until further notice.</p><p>Instead, I recommend the addon <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1], which provides a similar functionality.<p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
+    "message": "<p>If you want to show a colorful border around the \"+ New Message\" window, so you can tell different identities apart, I recommend the addon <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1]. Identity Chooser detects an installed copy of Border Colors D and integrates with it intelligently.</p><p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
   },
   "identitiesPopup_identitiesPopupTitle": {
     "message": "Identity Chooser"
