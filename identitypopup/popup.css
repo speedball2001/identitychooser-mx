@@ -16,11 +16,11 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --menu-color: rgb(250, 250, 250);
-    --menu-background-color: rgb(24, 24, 27);
+    --menu-background-color: rgb(63, 63, 70);
     --menu-font: message-box;
     --menu-font-size: 1rem;
     --button-color: rgb(250, 250, 250);
-    --button-background: #1b2c42;
+    --button-background: rgb(110, 110, 114);
     --button-focus-background: rgb(19, 115, 217);
     --bullet-color: rgb(250, 250, 250);
   }
@@ -76,6 +76,7 @@ ul#icIdentityList li > button {
 }
 
 button {
+    border-radius: 0.5em;
     font: var(--menu-font);
     font-size: var(--menu-font-size);
     border: none;
@@ -104,14 +105,14 @@ button {
 
 button:hover,
 button:focus {
-  border-radius: 0.6em;
+  border-radius: 0.5em;
   background-color: var(--button-focus-background);
   color: var(--button-color);
 }
 
 button#cancel {
   margin: 1em auto;
-  border-radius:0.5em !important;;
+  border-radius:0.5em !important;
   margin: 1em auto;
   background-color: var(--button-primary-background-color, rgb(19, 115, 217));
   color: var(--button-color);
