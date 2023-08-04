@@ -12,13 +12,13 @@
     "message": "Allgemein"
   },
   "options_icEnableComposeMessage.label": {
-    "message": "Zeige die Liste der Absendeadressen bei Klick auf den Verfassen-Button"
+    "message": "Zeige die Liste der Absendeadressen beim Verfassen einer neuen Email"
   },
   "options_icEnableReplayMessage.label": {
-    "message": "Zeige die Liste der Absendeadressen bei Klick auf den Antworten-Button"
+    "message": "Zeige die Liste der Absendeadressen beim Antworten auf eine Email"
   },
   "options_icEnableForwardMessage.label": {
-    "message": "Zeige die Liste der Absendeadressen bei Klick auf den Weiterleiten-Button"
+    "message": "Zeige die Liste der Absendeadressen bei Weiterleiten einer Email"
   },
   "options_restart.hint": {
     "message": "Hinweis: Eventuell muss Thunderbird neugestartet werden, wenn eine der obigen Optionen geändert wurde."

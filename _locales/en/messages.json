@@ -12,13 +12,13 @@
     "message": "General"
   },
   "options_icEnableComposeMessage.label": {
-    "message": "Show List of Identities When Clicking on Write button"
+    "message": "Show List of Identities When Writing a New Email"
   },
   "options_icEnableReplayMessage.label": {
-    "message": "Show List of Identities When Clicking on Reply button"
+    "message": "Show List of Identities When Replying to an Email"
   },
   "options_icEnableForwardMessage.label": {
-    "message": "Show List of Identities When Clicking on Forward button"
+    "message": "Show List of Identities When Forwarding an Email"
   },
   "options_restart.hint": {
     "message": "Hint: If you change any of these options you may need to restart Thunderbird"
