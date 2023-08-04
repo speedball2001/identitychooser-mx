@@ -100,8 +100,6 @@ button {
     width: 1rem;
     margin-left: 0px;
     margin-right: 1rem;
-
-    vertical-align: middle;
 }
 
 button:hover,
