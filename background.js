@@ -166,6 +166,14 @@ class IdentityChooser {
   }
 }
 
+browser.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
+  if (reason == "update" /* && previousVersion?.startsWith("3.") */) {
+    browser.tabs.create({ url: "/onboarding/changes.html" });
+  } else if (reason == "install") {
+    browser.tabs.create({ url: "/onboarding/onboarding.html" });
+  }
+});
+
 async function waitForLoad() {
   let onCreate = new Promise(function(resolve, reject) {
     function listener() {
