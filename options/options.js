@@ -81,6 +81,7 @@ class OptionsUI {
 
       // Create identity label and add it to the row
       var identityLabelDiv = document.createElement("div");
+      identityLabelDiv.classList.add("identity-label");
       identityLabelDiv.appendChild(document.createTextNode(identity.label));
       identityLabelDiv.setAttribute("identityId", identity.id);
 

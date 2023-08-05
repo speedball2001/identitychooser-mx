@@ -12,6 +12,38 @@ body, html {
 }
 
 .list-group-item {
-    cursor: move;
+    /* cursor: move; */
     display: flex;
+    margin: 0.7em auto;
+}
+
+.list-group-item > input {
+    margin-right: 1em;
+}
+
+.identity-label {
+    cursor: move !important;
+    width: 50%;
+    border-radius: 0.5em;
+    font: var(--menu-font);
+    font-size: var(--menu-font-size);
+    border: none;
+    padding: 0.6rem 1.1rem;
+    margin: 0 ;
+    text-decoration: none;
+    background: var(--button-background);
+    color: var(--button-color);
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 250ms ease-in-out,
+                transform 150ms ease;
+    -moz-appearance: none;
+}
+
+.identity-label:hover,
+.identity-label:focus {
+  border-radius: 0.5em;
+  background-color: var(--button-focus-background);
+  color: var(--button-focus-color);
 }
