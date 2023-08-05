@@ -59,6 +59,18 @@ class OptionsUI {
       }
     }
 
+    let borderColors = null;
+    try {
+      let resp = await browser.runtime.sendMessage("bordercolors-d@addonsdev.mozilla.org", {command: "getAllIdentitiesColors"});
+
+      if(resp && resp.command === "getAllIdentitiesColors") {
+        borderColors = resp.data;
+      }
+    } catch(error) {
+      // Border Colores not installed or otherwise available; eat the
+      // exception
+    }
+
     console.debug("OptionsUI#updateUI: populate identity sort list");
     var icIdentities = new IcIdentities(this.optionsBackend);
     var identities = await icIdentities.getIdentities();
@@ -81,6 +93,20 @@ class OptionsUI {
 
       // Create identity label and add it to the row
       var identityLabelDiv = document.createElement("div");
+
+      if(borderColors != null) {
+        let dotEl = document.createElement("span");
+        dotEl.classList.add("border-color");
+        identityLabelDiv.appendChild(dotEl);
+
+        if(identity.id in borderColors &&
+           borderColors[identity.id] !== undefined) {
+          identityLabelDiv.style.setProperty("--bullet-color", borderColors[identity.id]);
+        }
+      }
+
+
+      identityLabelDiv.classList.add("identity-label");
       identityLabelDiv.appendChild(document.createTextNode(identity.label));
       identityLabelDiv.setAttribute("identityId", identity.id);
 
