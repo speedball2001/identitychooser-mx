@@ -47,3 +47,13 @@ body, html {
   background-color: var(--button-focus-background);
   color: var(--button-focus-color);
 }
+
+.border-color{
+    background: var(--bullet-color, --button-color);
+    border-radius: 50%;
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    margin-left: 0px;
+    margin-right: 1rem;
+}
