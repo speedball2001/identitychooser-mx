@@ -6,9 +6,13 @@
     --menu-background-color: rgb(244, 244, 245);
     --menu-font: message-box;
     --menu-font-size: 1rem;
-    --button-color: rgb(250, 250, 250);
-    --button-background: #1b2c42;
+    --button-color: rgb(0, 0, 0);
+    --button-background: rgb(197, 197, 199);
+    --button-focus-color: rgb(250, 250, 250);
     --button-focus-background: rgb(19, 115, 217);
+    --button-cancel-color: rgb(250, 250, 250);
+    --button-cancel-button-background: rgb(19, 115, 217);
+    --button-cancel-button-hover-background: rgb(28, 131, 228);
     --bullet-color: rgb(250, 250, 250);
   }
 }
@@ -21,7 +25,12 @@
     --menu-font-size: 1rem;
     --button-color: rgb(250, 250, 250);
     --button-background: rgb(110, 110, 114);
+    --button-focus-color: rgb(250, 250, 250);
     --button-focus-background: rgb(19, 115, 217);
+    --button-cancel-color: rgb(250, 250, 250);
+    --button-cancel-button-background: rgb(19, 115, 217);
+    --button-cancel-button-hover-background: rgb(28, 131, 228);
+
     --bullet-color: rgb(250, 250, 250);
   }
 }
@@ -108,19 +117,19 @@ button:hover,
 button:focus {
   border-radius: 0.5em;
   background-color: var(--button-focus-background);
-  color: var(--button-color);
+  color: var(--button-focus-color);
 }
 
 button#cancel {
   margin: 1em auto;
   border-radius:0.5em !important;
   margin: 1em auto;
-  background-color: var(--button-primary-background-color, rgb(19, 115, 217));
-  color: var(--button-color);
+  background-color: var(--button-cancel-button-background);
+  color: var(--button-cancel-color);
 }
 button#cancel:hover {
-  background-color: var(--button-primary-hover-background-color, rgb(28, 131, 228));
-  color: var(--button-color);
+  background-color: var(--button-cancel-button-hover-background);
+  color: var(--button-cancel-color);
 }
 
 #bottomRow {
