@@ -1,5 +1,6 @@
 import { Options } from '../modules/options.js';
 import { IcIdentities } from '../modules/identities.js';
+import { BorderColorsApi } from '../modules/bordercolorsapi.js';
 
 class OptionsUI {
   constructor(options) {
@@ -59,17 +60,8 @@ class OptionsUI {
       }
     }
 
-    let borderColors = null;
-    try {
-      let resp = await browser.runtime.sendMessage("bordercolors-d@addonsdev.mozilla.org", {command: "colors.all"});
-
-      if(resp) {
-        borderColors = resp;
-      }
-    } catch(error) {
-      // Border Colores not installed or otherwise available; eat the
-      // exception
-    }
+    let borderColorsApi = new BorderColorsApi();
+    let borderColors = await borderColorsApi.getAllColors();
 
     console.debug("OptionsUI#updateUI: populate identity sort list");
     var icIdentities = new IcIdentities(this.optionsBackend);
