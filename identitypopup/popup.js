@@ -18,10 +18,10 @@ class IdentitiesPopup
 
     let borderColors = null;
     try {
-      let resp = await browser.runtime.sendMessage("bordercolors-d@addonsdev.mozilla.org", {command: "getAllIdentitiesColors"});
+      let resp = await browser.runtime.sendMessage("bordercolors-d@addonsdev.mozilla.org", {command: "colors.all"});
 
-      if(resp && resp.command === "getAllIdentitiesColors") {
-        borderColors = resp.data;
+      if(resp) {
+        borderColors = resp;
       }
     } catch(error) {
       // Border Colores not installed or otherwise available; eat the
