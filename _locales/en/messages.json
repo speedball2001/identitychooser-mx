@@ -20,6 +20,9 @@
   "options_icEnableForwardMessage.label": {
     "message": "Show List of Identities When Forwarding an Email"
   },
+  "options_icEnableDraftMessage.label": {
+    "message": "Show List of Identities When Opening a Draft"
+  },
   "options_restart.hint": {
     "message": "Hint: If you change any of these options you may need to restart Thunderbird"
   },

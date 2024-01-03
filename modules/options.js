@@ -4,13 +4,15 @@ export class Options {
       'icEnableComposeMessage',
       'icEnableReplyMessage',
       'icEnableForwardMessage',
+      'icEnableDraftMessage',
       'identitiesExtendedProps'
     ];
 
     this.defaultOptions = {
       icEnableComposeMessage: true,
       icEnableReplyMessage: true,
-      icEnableForwardMessage: true
+      icEnableForwardMessage: true,
+      icEnableDraftMessage: false
     };
   }
 
@@ -70,6 +72,10 @@ export class Options {
 
   async isEnabledForwardMessage() {
     return this.isEnabledOption("icEnableForwardMessage", true);
+  }
+
+  async isEnabledDraftMessage() {
+    return this.isEnabledOption("icEnableDraftMessage", false);
   }
 
   async isEnabledOption(optionKey, defaultValue) {
