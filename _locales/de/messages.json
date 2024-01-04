@@ -20,6 +20,9 @@
   "options_icEnableForwardMessage.label": {
     "message": "Zeige die Liste der Absendeadressen bei Weiterleiten einer Email"
   },
+  "options_icEnableDraftMessage.label": {
+    "message": "Zeige die Liste der Absendeadressen beim Öffnen eines Entwurfs an"
+  },
   "options_restart.hint": {
     "message": "Hinweis: Eventuell muss Thunderbird neugestartet werden, wenn eine der obigen Optionen geändert wurde."
   },

@@ -66,6 +66,15 @@ class IdentityChooser {
       }
     }
 
+    if(composeDetails.type == "draft") {
+      var isEnabledDraftMessage =
+          await this.icOptions.isEnabledDraftMessage();
+
+      if(!isEnabledDraftMessage) {
+        return;
+      }
+    }
+
     let composeWindow = await browser.windows.get(tab.windowId);
     const popUrl = browser.runtime.getURL("identitypopup/popup.html");
     let identityWindow = await browser.windows.create({
