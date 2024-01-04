@@ -50,8 +50,9 @@ h1, h2 {
     width: 100%;
     margin-bottom: 2em;
     text-align: left;
-    padding 1ex 0 0;
+    padding: 1ex 0 0;
 }
+
 .section:not(:last-child) {
     border-bottom: 1px solid #c4c4c4;
     padding: 1ex 0;
@@ -150,7 +151,7 @@ h1, h2 {
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, margin: 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, margin 0.3s ease;
 }
 .section .button:hover {
     box-shadow: inset 4px 2px 5px rgba(0, 0, 0, 0.3);
