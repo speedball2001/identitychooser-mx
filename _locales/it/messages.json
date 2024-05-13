@@ -1,0 +1,50 @@
+{
+  "extensionName": {
+  "message": "Identity Chooser"
+  },
+  "extensionDescription": {
+    "message": "Identity Chooser vi aiuta a scegliere l'identità corretta quando si compone un nuovo messaggio, quando si apre una bozza, quando si risponde o si inoltra un messaggio a qualcuno/a."
+  },
+  "options_optionsPageTitle": {
+    "message": "Identity Chooser -- Impostazioni"
+  },
+  "options_generalOptionsTitle": {
+    "message": "Generali"
+  },
+  "options_icEnableComposeMessage.label": {
+    "message": "Mostra l'elenco delle identità utilizzabili quando si compone un nuovo messaggio di posta elettronica"
+  },
+  "options_icEnableReplayMessage.label": {
+    "message": "Mostra l'elenco delle identità utilizzabili quando si risponde a un messaggio di posta elettronica"
+  },
+  "options_icEnableForwardMessage.label": {
+    "message": "Mostra l'elenco delle identità utilizzabili quando si inoltra un messaggio di posta elettronica"
+  },
+  "options_icEnableDraftMessage.label": {
+    "message": "Mostra l'elenco delle identità utilizzabili quando si apre una bozza"
+  },
+  "options_restart.hint": {
+    "message": "Suggerimento: se si cambia una di queste opzioni, è possibile che sia necessario riavviare Thunderbird"
+  },
+  "options_sortOptionsTitle": {
+    "message": "Ordinamento delle identità"
+  },
+  "options_sortOrder.hint": {
+    "message": "Per riordinare le identità sottostanti, usare il metodo \"trascina e rilascia\" (drag & drop). È anche possibile nascondere una o più identità tra quelle disponibili deselezionando qui sotto il relativo indirizzo di posta elettronica:"
+  },
+  "options_icWarnColorsTitle": {
+    "message": "Colori di avvertimento"
+  },
+  "options_icWarnColorsHint": {
+    "message": "<p>Se si vuol utilizzare un bordo colorato attorno alla finestra di composizione \"+ Nuovo Messaggio\", così da distinguere identità diverse, raccomando l'estensione <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1]. Identity Chooser infatti riconosce in maniera intelligente la presenza di questa estensione con cui si integra perfettamente.</p><p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
+  },
+  "identitiesPopup_identitiesPopupTitle": {
+    "message": "Identity Chooser"
+  },
+  "identitiesPopup_instructions": {
+    "message": "Seleziona un'identità per iniziare:"
+  },
+  "identitiesPopup_cancelButton": {
+    "message": "Annulla"
+  }
+}
