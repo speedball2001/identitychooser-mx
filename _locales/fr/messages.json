@@ -1,0 +1,50 @@
+{
+  "extensionName": {
+  "message": "Identity Chooser"
+  },
+  "extensionDescription": {
+    "message": "Permet de choisir une identité pour écrire, transférer ou répondre à un message."
+  },
+  "options_optionsPageTitle": {
+    "message": "Identité choisie · Options"
+  },
+  "options_generalOptionsTitle": {
+    "message": "Général"
+  },
+  "options_icEnableComposeMessage.label": {
+    "message": "Afficher la liste des identités pour écrire un nouveau message"
+  },
+  "options_icEnableReplayMessage.label": {
+    "message": "Afficher la liste des identités pour répondre à un message"
+  },
+  "options_icEnableForwardMessage.label": {
+    "message": "Afficher la liste des identités pour transférer un message"
+  },
+  "options_icEnableDraftMessage.label": {
+    "message": "Afficher la liste des identités pour ouvrir un brouillon"
+  },
+  "options_restart.hint": {
+    "message": "Conseil : Si vous modifiez l’une de ces options, vous devrez peut-être redémarrer Thunderbird."
+  },
+  "options_sortOptionsTitle": {
+    "message": "Tri des identités"
+  },
+  "options_sortOrder.hint": {
+    "message": "Réordonnez les identités par glisser-déposer. Vous pouvez masquer une identité dans le menu de Identity Chooser en décochant son adresse électronique ici :"
+  },
+  "options_icWarnColorsTitle": {
+    "message": "Couleurs de signalisation"
+  },
+  "options_icWarnColorsHint": {
+    "message": "<p>Si vous souhaitez afficher une bordure colorée autour de la fenêtre « + Nouveau message », de manière à distinguer les différentes identités, je vous recommande l’extension <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>Border Colors D</a>[1]. Identity Chooser détecte une copie installée de Border Colors D et l’intègre intelligemment.</p><p style='margin-left:1em'>[1] <a href='https://addons.thunderbird.net/addon/bordercolors-d/'>https://addons.thunderbird.net/addon/bordercolors-d/</a></p>"
+  },
+  "identitiesPopup_identitiesPopupTitle": {
+    "message": "Identity Chooser"
+  },
+  "identitiesPopup_instructions": {
+    "message": "Choisissez l’identité avec laquelle vous souhaitez envoyer le message :"
+  },
+  "identitiesPopup_cancelButton": {
+    "message": "Annuler"
+  }
+}
