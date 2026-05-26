@@ -20,6 +20,7 @@ class IdentitiesPopup
     let borderColorsApi = new BorderColorsApi();
     let borderColors = await borderColorsApi.getAllColors();
 
+    let icCount = 1;
     for(const identity of identities) {
       if(identity.showInMenu) {
         let li = document.createElement("li");
@@ -40,18 +41,47 @@ class IdentitiesPopup
           }
         }
 
-        let textEl = document.createElement("span");
-        textEl.textContent = identity.label;
-        button.appendChild(textEl);
+        let identityEl = document.createElement("span");
+        identityEl.textContent = identity.label;
+        button.appendChild(identityEl);
+
+        if(icCount <= 9) {
+          let counterEl = document.createElement("span");
+          counterEl.classList.add("counter")
+          counterEl.textContent = "[" + icCount + "]"
+          button.appendChild(counterEl);
+        }
 
         li.appendChild(button);
         identitiesList.appendChild(li);
+        icCount++;
       }
     }
 
     let cancelBtn = document.getElementById("cancel");
     cancelBtn.setAttribute("data", "cancel");
     cancelBtn.addEventListener("click", this.identityButtonClicked);
+
+    window.addEventListener("keyup", async (e) => {
+      if(e.key === "Escape") {
+        await messenger.runtime.sendMessage({
+          popupResponse: "cancel"
+        });
+
+        window.close();
+
+        return;
+      }
+
+      if(e.key <= 9) {
+        let allIcBtns = document.querySelectorAll("#icIdentityList button");
+        let btn = allIcBtns[e.key - 1];
+
+        if(btn) {
+          btn.click()
+        }
+      }
+    });
   }
 
   async identityButtonClicked(event) {

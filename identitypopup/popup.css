@@ -64,6 +64,11 @@ button {
     -moz-appearance: none;
 }
 
+button > span.counter {
+    float: right;
+    text-decoration: underline;
+}
+
 .border-color{
     background: var(--bullet-color, --button-color);
     border-radius: 50%;
