@@ -7,15 +7,22 @@ body, html {
   color: var(--menu-color);
   font: var(--menu-font);
   font-size: var(--menu-font-size);
+  margin: 0;
 }
 
-.wrapper {
-  margin: 0.8em auto;
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
+.spacer {
+    flex-grow: 1;
+
+}
 #instructions {
-    margin-top: 0.5rem;
-    margin-left: 0.5rem;
+    margin-top: 0.8rem;
+    margin-left: 0.8rem;
     font-size: 1.5rem;
     font-weight: 300;
     line-height: 1.3em;
@@ -25,6 +32,7 @@ ul#icIdentityList {
   display: flex;
   flex-direction: column;
   padding: 0px;
+  overflow-y:auto
 }
 
 ul#icIdentityList li {
