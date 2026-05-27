@@ -81,13 +81,23 @@ h1, h2 {
   margin-inline-start: 2em;
 }
 
+.section dt {
+    font-style: italic;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.section dd {
+    margin-inline-start: 2em;
+}
+
 .section.image-right {
     flex-direction: row-reverse;
 }
 
 .section > img {
     width: 50%;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
     margin-top: 15px;
 }
